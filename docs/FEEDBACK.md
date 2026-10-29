@@ -41,3 +41,5 @@ Things we hit building this, each with how it showed up. Written as we go; dates
 7. **Sandbox clock**: about 0.3 s of chain time per fast-forwarded block, so a day-based contract
    is testable by fast-forwarding, but the clock also runs with wall time, so a test must not rely
    on slow transactions finishing inside a short "day".
+8. **Meteor Wallet's `signAndSendTransaction` wants near-js `Action` objects.** The `{ type: "FunctionCall", params }` shape in the selector's own types is the *internal* shape; Meteor runs every action through `najActionToInternal` and throws "Unsupported NAJ action" for it, while other modules accept the internal shape. Build actions with `actionCreators.functionCall(...)` (re-exported by `@near-wallet-selector/core`). Found by a real join failing on testnet; `tests-web/` now pins it.
+9. **`rpc.testnet.near.org` is unreachable from browsers (Oct 2026)**; use FastNEAR's testnet RPCs.

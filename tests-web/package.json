@@ -1,0 +1,7 @@
+{
+  "name": "stakestreak-web-tests",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node --test" },
+  "devDependencies": { "@near-wallet-selector/core": "10.1.4" }
+}

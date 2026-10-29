@@ -45,6 +45,7 @@ a{color:var(--acc)}code{font-size:13px;word-break:break-all}
 </main>
 
 <script type="module">
+import { functionCallAction } from "./actions.js";
 const CONTRACT = "stakestreak-near.testnet";
 const FACTORY = "sputnikv2.testnet";
 // rpc.testnet.near.org is deprecated and unreachable from browsers (Oct 2026). Tried in order; the last one that worked is tried first.
@@ -81,10 +82,12 @@ async function view(account, method, args = {}) {
 }
 
 // ---- wallet (Wallet Selector). The page works read-only if the wallet libraries fail to load.
-let selector = null, modal = null, account = null;
+let selector = null, modal = null, account = null, actionCreators = null;
 async function initWallet() {
   try {
-    const { setupWalletSelector } = await import("https://cdn.jsdelivr.net/npm/@near-wallet-selector/core@10.1.4/+esm");
+    const core = await import("https://cdn.jsdelivr.net/npm/@near-wallet-selector/core@10.1.4/+esm");
+    const { setupWalletSelector } = core;
+    actionCreators = core.actionCreators;
     const { setupModal } = await import("https://cdn.jsdelivr.net/npm/@near-wallet-selector/modal-ui@10.1.4/+esm");
     const { setupMeteorWallet } = await import("https://cdn.jsdelivr.net/npm/@near-wallet-selector/meteor-wallet@10.1.4/+esm");
     selector = await setupWalletSelector({ network: { networkId: "testnet", nodeUrl: RPC, helperUrl: "https://helper.testnet.near.org", explorerUrl: EXPLORER, indexerUrl: "https://testnet-api.kitwallet.app" }, modules: [setupMeteorWallet()] });
@@ -108,7 +111,8 @@ async function callContract(method, args, depositYocto = "0", gasTgas = 50, rece
   if (!selector || !account) { toast("Connect a testnet wallet first."); return null; }
   try {
     const w = await selector.wallet();
-    const res = await w.signAndSendTransaction({ receiverId: receiver, actions: [{ type: "FunctionCall", params: { methodName: method, args, gas: String(BigInt(gasTgas) * 10n ** 12n), deposit: depositYocto } }] });
+    // near-js Action objects, not the internal { type, params } shape: Meteor throws "Unsupported NAJ action" on the latter.
+    const res = await w.signAndSendTransaction({ receiverId: receiver, actions: [functionCallAction(actionCreators, { method, args, gasTgas, depositYocto })] });
     const id = res?.transaction?.hash || res?.transaction_outcome?.id;
     toast(`${esc(method)} sent${id ? ` — <a target="_blank" rel="noopener" href="${EXPLORER}/txns/${id}">explorer</a>` : ""}`, 12000);
     setTimeout(render, 4000);
