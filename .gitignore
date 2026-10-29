@@ -1,0 +1,6 @@
+target/
+*.wasm
+!tests/fixtures/*.wasm
+.DS_Store
+.env
+.env.*

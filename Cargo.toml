@@ -1,0 +1,35 @@
+[package]
+name = "stakestreak-near"
+description = "Friends stake equal amounts into a Sputnik DAO treasury, check in daily, and the DAO policy pays the survivors."
+version = "0.1.0"
+edition = "2024"
+resolver = "3"
+rust-version = "1.93"
+license = "MIT"
+repository = "https://github.com/seekdaseek/stakestreak-near"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+near-sdk = "=5.29.1"
+
+[dev-dependencies]
+near-sdk = { version = "=5.29.1", features = ["unit-testing"] }
+near-sandbox = "0.3.12"
+near-api = "0.8"
+cargo-near-build = "0.11.0"
+tokio = { version = "1.12.0", features = ["full"] }
+testresult = "0.4.1"
+
+[profile.release]
+codegen-units = 1
+opt-level = "z"
+lto = true
+debug = false
+panic = "abort"
+overflow-checks = true
+
+[lints.rust.unexpected_cfgs]
+level = "warn"
+check-cfg = ['cfg(near)']
