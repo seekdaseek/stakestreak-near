@@ -90,10 +90,10 @@ impl World {
             .initial_balance(NearToken::from_near(near_amount as u128))
             .send()
             .await?;
-        // The account is a state patch; wait until the node serves its access key at final
-        // finality, or the next transaction fails with "access key does not exist while viewing".
+        // The account is a state patch; wait until the node serves its access key at FINAL finality
+        // (the signer's nonce lookup uses Final; Optimistic is a few blocks ahead), or the next transaction fails with "access key does not exist while viewing".
         for _ in 0..60 {
-            let keys = near_api::Account(id.clone()).list_keys().fetch_from(&self.net).await;
+            let keys = near_api::Account(id.clone()).list_keys().at(near_api::types::Reference::Final).fetch_from(&self.net).await;
             if matches!(&keys, Ok(k) if !k.data.is_empty()) {
                 return Ok(());
             }
