@@ -21,7 +21,11 @@ const MAX_FREEZES: u8 = 2;
 /// Kept by this contract out of `create_pot`'s deposit, to pay the storage of the pot record.
 const STORAGE_RESERVE: NearToken = NearToken::from_millinear(20);
 /// The deployed Sputnik factory refuses less than code_len + 32 bytes of storage (5.3968 NEAR on 29 Oct 2026).
-const MIN_DAO_DEPOSIT: NearToken = NearToken::from_millinear(5_400);
+/// What the DAO account must hold: its storage (measured on the deployed code, 540,327 bytes empty plus
+/// 273 bytes per proposal, at most MAX_MEMBERS + 1 proposals = 5.4606 NEAR) plus the DAO's own gas
+/// (about 0.003 NEAR for that many callbacks), with a margin of about 0.036 NEAR. The factory itself
+/// refuses less than 5.3968, and the account less than about 5.404, so the old 5.4 could be refused.
+const MIN_DAO_DEPOSIT: NearToken = NearToken::from_millinear(5_500);
 /// A Sputnik proposal that nobody approves for a year expires; ours are approved in the same chain.
 const PROPOSAL_PERIOD_NS: &str = "31536000000000000";
 
@@ -746,6 +750,15 @@ mod tests {
         assert!(dust < 3);
         let (fee0, share0, dust0) = split(4 * ten, 0, 4);
         assert_eq!((fee0, share0, dust0), (0, ten, 0));
+    }
+
+    #[test]
+    fn min_dao_deposit_covers_the_worst_case_dao() {
+        // measured: 540,327 bytes for an empty DAO with our policy, 273 bytes per proposal
+        let worst_bytes = 540_327u128 + 273 * (MAX_MEMBERS as u128 + 1);
+        let storage = worst_bytes * 10u128.pow(19);
+        let dao_gas = 3_000_000_000_000_000_000_000u128; // 0.003 NEAR, generous for 21 callbacks
+        assert!(MIN_DAO_DEPOSIT.as_yoctonear() >= storage + dao_gas + 30_000_000_000_000_000_000_000);
     }
 
     #[test]

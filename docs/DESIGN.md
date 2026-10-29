@@ -77,8 +77,14 @@ If a payee's account was deleted, the DAO's transfer fails and Sputnik marks the
 The deployed factory's `create` refuses less than `code_len + 32` bytes of storage:
 **5.3968 NEAR** (measured in the sandbox against the deployed code, 29 Oct 2026). The upstream
 source on `main` asks for 0.01 NEAR, so the live factory differs from that source; the sandbox
-tests use the live bytes. `create_pot` therefore needs about 5.6 NEAR attached (5.4 for the DAO
-plus a 0.02 storage reserve kept by the contract). That NEAR is storage staking for the DAO's copy
+tests use the live bytes. `create_pot` therefore needs at least 5.52 NEAR attached: 5.5 for the DAO plus a 0.02 storage reserve kept by the
+contract (the web client attaches 5.6). The 5.5 is measured, not guessed: the DAO account needs about 5.404 NEAR
+just to exist (the node refused a create with 5.4: "remaining balance will not be enough to cover storage"), and its
+storage grows 273 bytes per Transfer proposal from a base of 540,327 bytes, so the largest pot (20 members, 21
+payouts) needs 5.4606 NEAR of storage plus about 0.003 NEAR of the DAO's own gas. 5.5 leaves about 0.036 NEAR spare.
+Below the minimum `create_pot` refuses up front (`one_yocto_under_the_minimum_is_refused`); at exactly the minimum a pot
+is created and settles with the DAO still covering its storage (`exactly_the_minimum_creates_and_settles`, 0.088 NEAR
+spare after 4 payouts). That NEAR is storage staking for the DAO's copy
 of the code: it stays in the DAO and is not recoverable, so it is a per-pot cost of the
 one-DAO-per-pot design, on testnet free, on mainnet real. Gas for `create_pot`: about 93 Tgas.
 

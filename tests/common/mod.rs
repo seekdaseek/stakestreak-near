@@ -11,6 +11,20 @@ pub const DAO_CODE_HASH: &str = "AA4nA45vauiac3jdVwJTzSdUP3oj2r1fDaPAb2mHdgcH";
 pub type R<T> = testresult::TestResult<T>;
 
 pub const NEAR: u128 = 1_000_000_000_000_000_000_000_000;
+/// Build the contract once per test binary. The ABI step is skipped: cargo-near's ABI generation
+/// dlopen()s a freshly built dylib, which hung for 16 minutes with 0% CPU on macOS (dyld, 2026-10-29),
+/// and no test reads the ABI. The ABI is still built and embedded for the deployed wasm (`cargo near build`).
+fn contract_wasm() -> R<Vec<u8>> {
+    static WASM: std::sync::OnceLock<Vec<u8>> = std::sync::OnceLock::new();
+    if let Some(w) = WASM.get() {
+        return Ok(w.clone());
+    }
+    let opts = cargo_near_build::BuildOpts { no_abi: true, no_embed_abi: true, ..Default::default() };
+    let path = cargo_near_build::build_with_cli(opts)?;
+    let bytes = std::fs::read(path)?;
+    Ok(WASM.get_or_init(|| bytes).clone())
+}
+
 pub fn near(n: f64) -> NearToken {
     NearToken::from_yoctonear((n * 1e6) as u128 * (NEAR / 1_000_000))
 }
@@ -71,8 +85,7 @@ impl World {
         .assert_success();
 
         // Our contract.
-        let wasm_path = cargo_near_build::build_with_cli(Default::default())?;
-        let wasm = std::fs::read(wasm_path)?;
+        let wasm = contract_wasm()?;
         w.create_account(&w.streak.clone(), 20).await?;
         near_api::Contract::deploy(w.streak.clone())
             .use_code(wasm)
@@ -251,6 +264,11 @@ impl World {
 
     /// Create a pot and let `n` members join. Joining closes `join_secs` after creation.
     pub async fn new_pot(&self, name: &str, n: usize, min_members: u32, fee_bps: u32) -> R<Ctx> {
+        self.new_pot_with(name, n, min_members, fee_bps, near(5.6)).await
+    }
+
+    /// Same, with the deposit attached to `create_pot` chosen by the caller.
+    pub async fn new_pot_with(&self, name: &str, n: usize, min_members: u32, fee_bps: u32, deposit: NearToken) -> R<Ctx> {
         let creator = self.user(&format!("{name}-creator")).await?;
         let fee = self.user(&format!("{name}-fee")).await?;
         let rando = self.user(&format!("{name}-rando")).await?;
@@ -260,7 +278,7 @@ impl World {
         args["args"]["day_secs"] = DAY_SECS.into();
         args["args"]["duration_days"] = DAYS.into();
         args["args"]["join_secs"] = 150.into();
-        let r = self.call(&creator, &self.streak, "create_pot", args, near(5.6), 300).await?;
+        let r = self.call(&creator, &self.streak, "create_pot", args, deposit, 300).await?;
         ensure_ok(&r, "create_pot");
         let mut members = vec![];
         for i in 0..n {

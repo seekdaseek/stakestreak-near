@@ -123,3 +123,15 @@ So the multisig works only when a loser cooperates; the StakeStreak pot pays by 
 (`streak-demo-1`). The first create attempt with 5.4 NEAR attached was refused by the node
 ("remaining balance will not be enough to cover storage", the DAO account itself needs about 5.41 NEAR for its
 copy of the code); 5.6 worked. Both are in the runner log, not on chain (no transaction was sent).
+
+### Contract redeployed again: create-deposit minimum (2026-10-29)
+
+`MIN_DAO_DEPOSIT` raised from 5.4 to 5.5 NEAR (so `create_pot` needs at least 5.52 attached), derived in
+[DESIGN.md](DESIGN.md#cost-of-one-pot-dao-the-number-that-looks-bad). Tests: `one_yocto_under_the_minimum_is_refused`,
+`exactly_the_minimum_creates_and_settles`, `min_dao_deposit_covers_the_worst_case_dao`; the full suite ran once, 18 passed.
+Redeploy: [6sPPjEtT…](https://testnet.nearblocks.io/txns/6sPPjEtTzMYvxGH821k5HpXEAMM2fZecUKPrCoRwugyD); on-chain code
+sha256 `da36de71…23ab` equals the local build (read back from the node); `streak-demo-1` and `streak-demo-2` still read.
+
+Also found while running the suite: one test run hung for 16 minutes at 0% CPU inside `cargo near build`'s ABI step
+(macOS `dyld` loading the freshly built dylib). Nothing in the contract was involved. The test harness now skips the ABI step
+and builds the contract once per test binary; the deployed wasm is still built with its ABI.

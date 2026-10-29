@@ -22,7 +22,8 @@ Things we hit building this, each with how it showed up. Written as we go; dates
    us reading `policy.rs`.
 5. **`WeightOrRatio::Ratio(n, d)` reads as a fraction but rounds up to `n*total/d + 1`**, so 2/3
    of 3 is unanimity. For a fixed "2 of N" use `Weight`.
-6. **No way to recover the creation deposit**: the DAO account cannot be deleted by design.
+6. **The factory's stated minimum is not enough to create a DAO.** `create` accepts 5.3968 NEAR but the new account then needs about 5.404 NEAR for its own storage, so a deposit between the two is refused at the account (CLI: "remaining balance will not be enough to cover storage"); and storage keeps growing with every proposal. The real minimum should be published.
+7. **No way to recover the creation deposit**: the DAO account cannot be deleted by design.
 
 ## Tooling
 
