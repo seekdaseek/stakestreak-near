@@ -102,3 +102,24 @@ member gets the stake back minus the fee (3% of the stake), and the fees go to t
 Redeploy to `stakestreak-near.testnet`: [GdUjQwvu…](https://testnet.nearblocks.io/txns/GdUjQwvuYmEqB5G2vjb2ybPqoJNgjbeFG4Lw5axBDZrm).
 On-chain code sha256 read back from the node equals the local build (`97651042…b69d9`), and `get_pot` still reads
 `streak-demo-1` and `streak-demo-2` (state layout unchanged). The new rule has **not yet run on testnet**; the recorded demo pot will show it.
+
+## The control on testnet: `streak-control-1` (2026-10-29)
+
+The same three-friend pot as a plain Sputnik multisig: council of three, 2 votes needed, **no companion contract**
+([create, 5.6 NEAR attached](https://testnet.nearblocks.io/txns/Buju1HcxGVyxpn2yqCt9AQhXbg6zeK2CB4KybQa9vksv); DAO
+[`streak-control-1.sputnikv2.testnet`](https://testnet.nearblocks.io/address/streak-control-1.sputnikv2.testnet)). Made by
+`scripts/testnet-control.sh`. Each member sent 0.5 NEAR to the treasury:
+[m1](https://testnet.nearblocks.io/txns/G714So4jCg3crFCNNU5fo7Cr2GQp6Cye3HHuUnZJcdkF),
+[m2](https://testnet.nearblocks.io/txns/ByKikqeEUu4fsY5LCqrunsT1RD7Q2DR2GMQ6tG2MoXGW),
+[m4](https://testnet.nearblocks.io/txns/BqDy3T86tixs6Dyd5DtuXV46BD6qt5h3QVn4GBLYXmr1).
+
+| Step | Result |
+|---|---|
+| m1 is the "survivor": [add_proposal](https://testnet.nearblocks.io/txns/2cFomKwgjyxTgS4Y455Lar68Mm576HDpDhP6kfk9Yy84) (1.5 NEAR to m1) and [votes yes](https://testnet.nearblocks.io/txns/HVWH1zKTuxyurhaaiC4cLSSPhNhVhj2uKPf9tCrYyyZR) | proposal 0: 1 of 2 votes |
+| m2 and m4 (the "losers") do nothing for 180 s | status `InProgress`, treasury still 7.1 NEAR (5.6 creation + 1.5 stakes), the survivor has nothing |
+| Control check: [m2 votes yes](https://testnet.nearblocks.io/txns/FPPRvPLz7QgAoZMa278rdLP3yJHNLLz6vh58M8koQzhi) | status `Approved`, treasury 5.6 NEAR, m1 received the 1.5 NEAR (balance read back) |
+
+So the multisig works only when a loser cooperates; the StakeStreak pot pays by rule, with nobody voting
+(`streak-demo-1`). The first create attempt with 5.4 NEAR attached was refused by the node
+("remaining balance will not be enough to cover storage", the DAO account itself needs about 5.41 NEAR for its
+copy of the code); 5.6 worked. Both are in the runner log, not on chain (no transaction was sent).
