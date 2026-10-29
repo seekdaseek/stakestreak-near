@@ -15,7 +15,7 @@ STAKE_YOCTO="${STAKE_YOCTO:-500000000000000000000000}"
 DAY_SECS="${DAY_SECS:-600}"
 JOIN_SECS="${JOIN_SECS:-420}"
 DAYS="${DAYS:-3}"
-EXPLORER="https://explorer.testnet.near.org/transactions"
+EXPLORER="https://testnet.nearblocks.io/txns"
 
 send() { # label account method json deposit gas
   out=$(near contract call-function as-transaction "$CONTRACT" "$3" json-args "$4" \
@@ -69,4 +69,4 @@ while [ "$i" -lt 6 ]; do
 done
 echo "== DAO proposals"
 near contract call-function as-read-only "$POT.$FACTORY" get_proposals json-args '{"from_index":0,"limit":20}' network-config testnet now 2>&1 | grep -E '"id"|"status"|receiver_id|"amount"' | paste - - - -
-echo "DAO: https://explorer.testnet.near.org/accounts/$POT.$FACTORY"
+echo "DAO: https://testnet.nearblocks.io/address/$POT.$FACTORY"
