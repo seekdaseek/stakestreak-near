@@ -27,5 +27,8 @@ POT=streak-demo-3 START=<epoch seconds of start_ns> DAY_SECS=600 DAYS=3 \
 SETTLER=<an account with gas> PLAN="<m1>:0,1,2 <m2>:0" ./scripts/run-actors.sh
 ```
 
-Tested: `send_tx` against a stub CLI (flaky, dead and panicking cases) and `run-actors.sh` end to
-end against a stub CLI. UNTESTED: the same scripts on the server with the real CLI.
+The server runner is a folder of its own holding the released `near` binary (sha256 checked), the test accounts' keys
+(root-only, own HOME so the CLI never touches anything else) and these scripts. Tested: `send_tx` against a stub CLI (flaky,
+dead, refused and panicking cases), `run-actors.sh` end to end against a stub CLI, and on the server with the real CLI: a view
+call, a real transaction, and a whole pot (`streak-demo-3` in [TESTNET.md](TESTNET.md)). A refusal that the CLI's own
+simulation reports (`ExecutionError`, for example not enough gas or `ERR_...`) is final and is not retried; the log keeps its text.

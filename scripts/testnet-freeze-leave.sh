@@ -31,7 +31,7 @@ START=$(( $(pot | sed -n 's/.*"start_ns": *"\{0,1\}\([0-9]*\).*/\1/p' | head -1)
 echo "== pot starts at epoch $START ($(date -u -r "$START" +%H:%M:%S 2>/dev/null || date -u -d "@$START" +%H:%M:%S) UTC)"
 echo "== M4 leaves before the start"
 [ "$(date +%s)" -lt "$START" ] || echo "WARNING: start already passed, leave will be refused"
-step "leave $M4" "$M4" leave "$ARG" "0 NEAR" "60 Tgas"
+step "leave $M4" "$M4" leave "$ARG" "0 NEAR" "150 Tgas"
 
 d=0
 while [ "$d" -lt 3 ]; do

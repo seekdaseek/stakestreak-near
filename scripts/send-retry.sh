@@ -2,6 +2,7 @@
 #
 #   send_tx <label> <signer> <method> <json> <deposit> <gas>
 #
+# A refusal the CLI's own simulation reports (ExecutionError) is final and not retried.
 # Up to TRIES attempts (default 3), RETRY_WAIT seconds apart (default 6). An attempt counts as
 # having reached the chain when the CLI printed a Transaction ID; a contract panic after that is
 # final and is not retried. Every attempt's full CLI output goes to LOG (default ./runner.log),
@@ -30,6 +31,12 @@ send_tx() {
       printf '%s %-34s %s\n' "$(date -u +%H:%M:%S)" "$_label" "$EXPLORER/$TX_ID"
       printf '%s\n' "$_out" | grep -E "Smart contract panicked|ERR_|Failure" | head -3 || true
       return 0
+    fi
+    # The CLI simulates first: a contract refusal ("ExecutionError") is final, retrying cannot change it.
+    if printf '%s\n' "$_out" | grep -q 'ExecutionError'; then
+      printf '%s %-34s REFUSED by the contract: %s\n' "$(date -u +%H:%M:%S)" "$_label" \
+        "$(printf '%s\n' "$_out" | sed -n 's/.*ExecutionError("\(.*\)").*/\1/p' | head -1 | cut -c1-120)"
+      return 1
     fi
     printf '%s %-34s no tx id, attempt %s/%s: %s\n' "$(date -u +%H:%M:%S)" "$_label" "$_n" "$TRIES" \
       "$(printf '%s\n' "$_out" | grep -v '^[[:space:]]*$' | tail -1 | cut -c1-160)"

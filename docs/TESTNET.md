@@ -135,3 +135,38 @@ sha256 `da36de71…23ab` equals the local build (read back from the node); `stre
 Also found while running the suite: one test run hung for 16 minutes at 0% CPU inside `cargo near build`'s ABI step
 (macOS `dyld` loading the freshly built dylib). Nothing in the contract was involved. The test harness now skips the ABI step
 and builds the contract once per test binary; the deployed wasm is still built with its ABI.
+
+## Pot 3: `streak-demo-3`, a leave and a freeze (2026-10-29), run only by scripts on the server
+
+No wallet, no laptop: `scripts/testnet-freeze-leave.sh` ran on a server with the retrying sender (`scripts/send-retry.sh`).
+0.5 NEAR stakes, 3 days of 2 minutes, 3% fee, minimum 3 members, DAO
+[`streak-demo-3.sputnikv2.testnet`](https://testnet.nearblocks.io/address/streak-demo-3.sputnikv2.testnet).
+Created by m1 with 5.6 NEAR ([7jP47qDS…](https://testnet.nearblocks.io/txns/7jP47qDS7GmLhjFyEPE9vDm2aYt1kshy3HaXGDZgpvp1)).
+
+| Step | Transaction |
+|---|---|
+| m1, m2, m3, m4 join | [m1](https://testnet.nearblocks.io/txns/6iS5qwwQWVaS5poANjB5TfXYUF1eunZ3MGgiZSxwdoiz), [m2](https://testnet.nearblocks.io/txns/2QEfGPuCj8K5VYjPmCrPQd2Zhzx7ByvULNereYStkR53), [m3](https://testnet.nearblocks.io/txns/8jbebmoJPjLZRzV3jzGx2p8FPvaqBTTim8eNJRrVGCUA), [m4](https://testnet.nearblocks.io/txns/3uutayW3NtB5yQco5kRaxpMxcVzNJDNC1hfa91Sxjrjc) |
+| **m4 leaves before the start** (refund of the full stake, no fee) | [CakTium…](https://testnet.nearblocks.io/txns/CakTiumQxNv9AdxwqQivynrqAF7o8ejh2h3xmZTzh8pD) |
+| Day 0: m1, m2, m3 check in | [m1](https://testnet.nearblocks.io/txns/4DzpqyLvaYk7b3B2MpZDHUWrk8cFAGuktK3ioHBh4N7X), [m2](https://testnet.nearblocks.io/txns/BCppiJ5JBUrY86rp8JoVHobuRr5WygLFiAnEfhQFKmHw), [m3](https://testnet.nearblocks.io/txns/BWNBZa31WyUMezLfYpzN3djy5DUBvVuL8WbFTGtJ2T1A) |
+| Day 1: m1, m2 check in, **m3 does not** | [m1](https://testnet.nearblocks.io/txns/J7k68ELTcEhrxxkDRfjkwHoJjME9CVTbANyHiFZYzqmT), [m2](https://testnet.nearblocks.io/txns/6sGNzrpzZ8kb4eXr8qxjXdc6mF9WkUSp5K5m98EwZ1bm) |
+| Day 2: **m3 buys a freeze** (0.05 NEAR, covers day 1) | [EmHQyfmt…](https://testnet.nearblocks.io/txns/EmHQyfmtniZWucMqjLrAMV1Hz3hQtdxYW3JHVtFMrKAU) |
+| Day 2: m1, m2, m3 check in | [m1](https://testnet.nearblocks.io/txns/DeuiXBpThLqi397hdX5ZvWrqYDeVHXxcaxVJXwVSUeU9), [m2](https://testnet.nearblocks.io/txns/9zZES4pBcDN82zCSi32cU2sZP4YfaCdgYfAQyCd7XM9R), [m3](https://testnet.nearblocks.io/txns/99Ezp6DM1ABqtQLf1QWmnKr933n17bSHo7JZw8yuWvXt) |
+| Settle (two calls, batch 3) | [AwgNR1c8…](https://testnet.nearblocks.io/txns/AwgNR1c81aqFG1p7kQgmPhgJscyz1tyRGtQz3bhwzFy8), [7kVLFv2Z…](https://testnet.nearblocks.io/txns/7kVLFv2Z9cbt6T4urw5G7DSEeXRaLdKNpZ8Dh2aUMoS) |
+
+Read back by view calls after the end: `get_pot` says `settled`, 0 pending; m1, m2, m3 `alive` with day mask `7`, m3 with 1
+freeze used. Five Transfer proposals, all `Approved`, all proposed by the contract: 0.5 NEAR to m4 (the leave refund), 0.045
+to the fee account (3% of 1.5), 0.485 to each of m1, m2, m3 ((1.5 - 0.045) / 3). The fee account's balance rose by 0.095 NEAR
+over the pot: 0.045 fee plus the 0.05 freeze fee, which goes straight to it. The DAO is left at its 5.58 NEAR creation deposit.
+
+**What went wrong, kept in the record:** the script sent `leave` with 60 Tgas and the node refused it ("Exceeded the prepaid gas",
+no transaction made; the retry helper tried three times, as designed, and gave up: "give-ups: 1"). `leave` files and approves
+the refund proposal in the DAO and needs about 150 Tgas. I re-sent it by hand from the same server with 150 Tgas, 70 seconds
+before the start, which is the transaction in the table; the script now uses 150 Tgas.
+
+The server runner: `near-cli-rs` 0.30.1 (the project's release binary, sha256 checked against the published file), the four
+test accounts' keys in a root-only folder of its own, nothing else on the server touched. `send_tx` proof on the server: a view
+call and one real transaction ([7MrWbvaX…](https://testnet.nearblocks.io/txns/7MrWbvaBXR5SXzzaXKpuhiueF9LejLoJYDfseqAgSz8a),
+an idempotent `settle` on the already settled `streak-demo-2`, `SuccessValue`).
+
+**Deposit minimum, live:** a `create_pot` with 5.51 NEAR (one cent under the 5.52 minimum) from the server was refused by the node's
+own simulation with `Smart contract panicked: ERR_DEPOSIT_TOO_SMALL`; no transaction was sent, nothing created.
