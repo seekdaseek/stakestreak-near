@@ -3,7 +3,7 @@
 # then check them against tests/fixtures/SHA256SUMS. The sandbox tests run against these exact bytes.
 set -eu
 cd "$(dirname "$0")/../tests/fixtures"
-RPC="${NEAR_TESTNET_RPC:-https://rpc.testnet.near.org}"
+RPC="${NEAR_TESTNET_RPC:-https://test.rpc.fastnear.com}"
 python3 - "$RPC" <<'PY'
 import base64, json, sys, urllib.request
 rpc = sys.argv[1]

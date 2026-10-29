@@ -46,7 +46,8 @@ a{color:var(--acc)}code{font-size:13px;word-break:break-all}
 <script type="module">
 const CONTRACT = "stakestreak-near.testnet";
 const FACTORY = "sputnikv2.testnet";
-const RPC = "https://rpc.testnet.near.org";
+// rpc.testnet.near.org answers 429 "deprecated" since late Oct 2026; FastNEAR serves testnet.
+const RPC = "https://test.rpc.fastnear.com";
 const EXPLORER = "https://testnet.nearblocks.io";
 const NEAR = 10n ** 24n;
 const $ = (s) => document.querySelector(s);
@@ -70,7 +71,7 @@ async function initWallet() {
     const { setupWalletSelector } = await import("https://cdn.jsdelivr.net/npm/@near-wallet-selector/core@10.1.4/+esm");
     const { setupModal } = await import("https://cdn.jsdelivr.net/npm/@near-wallet-selector/modal-ui@10.1.4/+esm");
     const { setupMeteorWallet } = await import("https://cdn.jsdelivr.net/npm/@near-wallet-selector/meteor-wallet@10.1.4/+esm");
-    selector = await setupWalletSelector({ network: "testnet", modules: [setupMeteorWallet()] });
+    selector = await setupWalletSelector({ network: { networkId: "testnet", nodeUrl: RPC, helperUrl: "https://helper.testnet.near.org", explorerUrl: EXPLORER, indexerUrl: "https://testnet-api.kitwallet.app" }, modules: [setupMeteorWallet()] });
     // Sign-in adds a function-call key limited to check_in on our contract: daily check-ins need no pop-up.
     modal = setupModal(selector, { contractId: CONTRACT, methodNames: ["check_in"] });
     const upd = (accts) => { account = accts.find((a) => a.active)?.accountId || null; $("#who").textContent = account || ""; $("#connect").textContent = account ? "Disconnect" : "Connect wallet"; render(); };

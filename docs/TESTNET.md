@@ -45,3 +45,8 @@ members. Created by `stakestreak-near-fee.testnet`
 ([j4Dmryu1…](https://testnet.nearblocks.io/txns/j4Dmryu12NVpHsBkKKBNmJUrVKEf51ti32jxJZZ9XYu)) joined by CLI.
 The remaining transactions are made through the web client with a separate wallet held by the
 developer, through the web client. That is not an outside user.
+
+The developer's separate wallet account was funded with 2 NEAR from test account m4
+([GrJoSv4Y…](https://testnet.nearblocks.io/txns/GrJoSv4YWPeDpbciPcUy4ndLVE9u7SCgoKbKmDYPY44Q)).
+Note: `rpc.testnet.near.org` started answering HTTP 429 "deprecated" on 2026-10-29; the client and the
+fetch script use FastNEAR's testnet RPC (`test.rpc.fastnear.com`) instead.
