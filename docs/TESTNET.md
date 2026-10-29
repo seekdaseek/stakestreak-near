@@ -61,3 +61,34 @@ internal action shape, see docs/FEEDBACK.md items 8 and 9). Join, read from chai
 (`tx` RPC, final): [6YjBhFEX…](https://testnet.nearblocks.io/txns/6YjBhFEXyFQwiXTC9Bpkpimq99zx8Cst5H3Y7jM22m75),
 signer `ochinimus.testnet` (full-access key, wallet approval), method `join`, 0.5 NEAR, 50 Tgas,
 `SuccessValue`. The pot then listed 3 funded members and the DAO held 7.08 NEAR (5.58 creation + 3 x 0.5).
+
+### streak-demo-2 run (2026-10-29), result: nobody survived, the whole pot went to the fee account
+
+Pot clock: start 18:50:44 UTC, days of 10 minutes, end 19:20:44 UTC. Test accounts m1 and m2 were driven
+by a script; the developer's wallet account `ochinimus.testnet` by hand in the browser, through the web client.
+
+| Window | Who | Result |
+|---|---|---|
+| 1 (18:50:44-19:00:44) | m1 | check-in ok ([9AsEMHT5…](https://testnet.nearblocks.io/txns/9AsEMHT5CCvNiVH48QWea48FCDMbobUUkkSLWcq8f3Yr)) |
+| 1 | m2 | check-in ok ([2uNNKQXk…](https://testnet.nearblocks.io/txns/2uNNKQXkvojei1hjzEpC6ZAaFPycCD5JgXqgom2oE198)) |
+| 1 | `ochinimus.testnet` | check-in ok at 18:51:41 ([3moLRnQz…](https://testnet.nearblocks.io/txns/3moLRnQzPgrotkimCddpfKubWRXx5iZQzPTXcmaSEGry)) |
+| 2 (19:00:44-19:10:44) | m1 | **no transaction reached the chain** (script call at 19:01:14 returned no tx id; scan of every block from about 19:00:34 to 19:02:04 shows no m1 transaction) |
+| 2 | m2 | skipped on purpose (out) |
+| 2 | `ochinimus.testnet` | no check-in on chain |
+| 3 (19:10:44-19:20:44) | m1 | check-in ok ([AnMm9Sx4…](https://testnet.nearblocks.io/txns/AnMm9Sx43NbceDRxrkLPHCLmyPAXi1Sh6ikPXcDzrVvp)), but too late: day 1 was already missed |
+| 3 | `ochinimus.testnet` | no check-in on chain |
+
+Read back from the contract after the end (`get_pot`): day bitmasks m1 `5` (days 0 and 2), m2 `1`, `ochinimus.testnet` `1`;
+all three `alive: false`. The contract did what its rules say for "no survivors": one Transfer proposal,
+id 0, 1.5 NEAR (the whole pot, no 3% cut) to `stakestreak-near-fee.testnet`, status `Approved`,
+settled by m4 in [4L45icTR…](https://testnet.nearblocks.io/txns/4L45icTRNLwZgAfqeFXWYjpRNvddsbJhrtG26p2g3Roy).
+Balances after: pot DAO 5.58 NEAR (the creation storage only), fee account 5.944 NEAR. Nobody was paid out as a winner. The
+planned result (`ochinimus.testnet` and m1 paid, m2 nothing, fee 0.045) did **not** happen.
+
+**Why:** m1's window-2 check-in never reached the chain (cause unknown: the script did not keep the CLI's error text; likely the CLI's RPC). The
+developer's account has one check-in on chain, for window 1.
+
+**Does Meteor ask for approval on a check-in?** For the one check-in on chain, no. The transaction was signed by the
+function-call key `CwaSRxWJwbcn…` added at sign-in (receiver `stakestreak-near.testnet`, method `check_in`, no deposit,
+30 Tgas), not by the full-access key, read from the `tx` RPC (`public_key`). A silent check-in is therefore proven for window 1
+only; windows 2 and 3 were not exercised through the wallet.
