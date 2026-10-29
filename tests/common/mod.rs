@@ -90,7 +90,16 @@ impl World {
             .initial_balance(NearToken::from_near(near_amount as u128))
             .send()
             .await?;
-        Ok(())
+        // The account is a state patch; wait until the node serves its access key at final
+        // finality, or the next transaction fails with "access key does not exist while viewing".
+        for _ in 0..60 {
+            let keys = near_api::Account(id.clone()).list_keys().fetch_from(&self.net).await;
+            if matches!(&keys, Ok(k) if !k.data.is_empty()) {
+                return Ok(());
+            }
+            self.sandbox.fast_forward(3).await?;
+        }
+        panic!("account {id} never became visible");
     }
 
     pub async fn user(&self, name: &str) -> R<AccountId> {
