@@ -50,3 +50,14 @@ The developer's separate wallet account was funded with 2 NEAR from test account
 ([GrJoSv4Y…](https://testnet.nearblocks.io/txns/GrJoSv4YWPeDpbciPcUy4ndLVE9u7SCgoKbKmDYPY44Q)).
 Note: `rpc.testnet.near.org` started answering HTTP 429 "deprecated" on 2026-10-29; the client and the
 fetch script use FastNEAR's testnet RPC (`rpc.testnet.fastnear.com`, then `test.rpc.fastnear.com`, then the archival RPC) instead.
+
+### Wallet test (a separate wallet held by the developer, through the web client)
+
+Not an outside user. The developer signed in with Meteor Wallet on testnet as `ochinimus.testnet`;
+sign-in added a function-call key limited to `check_in` on `stakestreak-near.testnet` (allowance
+0.25 NEAR), read from the account's key list. The first join attempts failed in the page for two
+reasons found and fixed (browser could not reach `rpc.testnet.near.org`; Meteor rejects the
+internal action shape, see docs/FEEDBACK.md items 8 and 9). Join, read from chain
+(`tx` RPC, final): [6YjBhFEX…](https://testnet.nearblocks.io/txns/6YjBhFEXyFQwiXTC9Bpkpimq99zx8Cst5H3Y7jM22m75),
+signer `ochinimus.testnet` (full-access key, wallet approval), method `join`, 0.5 NEAR, 50 Tgas,
+`SuccessValue`. The pot then listed 3 funded members and the DAO held 7.08 NEAR (5.58 creation + 3 x 0.5).
