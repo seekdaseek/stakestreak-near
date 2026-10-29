@@ -7,9 +7,9 @@ survivors: no vote, no server holding the money.
 Hackathon track: `social` (NEAR HACKATHON). Status: work in progress, testnet only.
 
 **Disclosures.** StakeStreak already exists on Solana (live on the Solana dApp Store); only the NEAR
-integration in this repo, written from 2026-10-19 on, is the submission. The code was written with
-AI assistance (Claude Code). The same author's other entry is
-[agentfeed-near](https://near.ochinimus.app) (track `agents`).
+integration in this repo, written from 2026-10-19 on, is the submission.
+Written with AI coding assistance, as the rules allow (Q-005).
+The same author's other entry is [agentfeed-near](https://near.ochinimus.app) (track `agents`).
 
 ## How it works
 
