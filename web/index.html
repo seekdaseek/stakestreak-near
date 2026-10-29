@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StakeStreak on NEAR</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@near-wallet-selector/modal-ui@10.1.4/styles.css">
+<style>
+:root{--bg:#0f1115;--card:#181b22;--line:#2a2f3a;--tx:#e8eaf0;--mut:#8b93a7;--ok:#3ddc97;--bad:#ff6b6b;--acc:#7c9cff;--warn:#ffc857}
+@media (prefers-color-scheme:light){:root{--bg:#f5f6f8;--card:#fff;--line:#dde0e7;--tx:#14171f;--mut:#5d667a;--ok:#0d9b5f;--bad:#d93a3a;--acc:#3556d8;--warn:#a87400}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:860px;margin:0 auto;padding:16px}
+header{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px}
+h1{font-size:20px;margin:0}h1 a{color:inherit;text-decoration:none}
+h2{font-size:16px;margin:20px 0 8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin:10px 0}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.mut{color:var(--mut)}.small{font-size:13px}
+button{background:var(--acc);color:#fff;border:0;border-radius:8px;padding:9px 14px;font:inherit;cursor:pointer}
+button.ghost{background:transparent;color:var(--tx);border:1px solid var(--line)}
+button:disabled{opacity:.45;cursor:not-allowed}
+input{background:var(--bg);color:var(--tx);border:1px solid var(--line);border-radius:8px;padding:8px;font:inherit;width:100%}
+label{display:block;font-size:13px;color:var(--mut);margin-bottom:3px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.badge{display:inline-block;border-radius:99px;padding:2px 9px;font-size:12px;border:1px solid var(--line)}
+.ok{color:var(--ok);border-color:var(--ok)}.bad{color:var(--bad);border-color:var(--bad)}.warn{color:var(--warn);border-color:var(--warn)}
+table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:6px 4px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:middle}
+.sq{display:inline-block;width:22px;height:22px;border-radius:5px;margin-right:3px;border:1px solid var(--line);text-align:center;line-height:20px;font-size:12px}
+.sq.y{background:var(--ok);color:#fff;border-color:var(--ok)}.sq.n{background:var(--bad);color:#fff;border-color:var(--bad)}.sq.now{outline:2px solid var(--acc)}
+a{color:var(--acc)}code{font-size:13px;word-break:break-all}
+#toast{position:fixed;left:16px;right:16px;bottom:16px;max-width:520px;margin:auto;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;display:none}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1><a href="#">StakeStreak <span class="mut">on NEAR testnet</span></a></h1>
+  <div class="row"><span id="who" class="mut small"></span><button id="connect">Connect wallet</button></div>
+</header>
+<p class="mut small">Friends stake equal NEAR into a pot, check in every day, miss a day and you are out. The pot is a Sputnik DAO treasury; its policy pays the survivors. Testnet only.</p>
+<div id="app"><p class="mut">Loading…</p></div>
+<div id="toast"></div>
+</main>
+
+<script type="module">
+const CONTRACT = "stakestreak-near.testnet";
+const FACTORY = "sputnikv2.testnet";
+const RPC = "https://rpc.testnet.near.org";
+const EXPLORER = "https://explorer.testnet.near.org";
+const NEAR = 10n ** 24n;
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const nearFmt = (y) => { const v = BigInt(y); const w = v / NEAR, f = (v % NEAR) / (NEAR / 10000n); return `${w}.${String(f).padStart(4, "0")}`.replace(/0+$/, "").replace(/\.$/, ""); };
+const toYocto = (s) => { const [a, b = ""] = String(s).trim().split("."); return (BigInt(a || "0") * NEAR + BigInt((b + "0".repeat(24)).slice(0, 24))).toString(); };
+
+function toast(msg, ms = 6000) { const t = $("#toast"); t.innerHTML = msg; t.style.display = "block"; clearTimeout(toast.h); toast.h = setTimeout(() => (t.style.display = "none"), ms); }
+
+async function view(account, method, args = {}) {
+  const r = await fetch(RPC, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "query", params: { request_type: "call_function", finality: "optimistic", account_id: account, method_name: method, args_base64: btoa(JSON.stringify(args)) } }) });
+  const j = await r.json();
+  if (j.error || j.result?.error) throw new Error(JSON.stringify(j.error || j.result.error).slice(0, 300));
+  return JSON.parse(new TextDecoder().decode(new Uint8Array(j.result.result)));
+}
+
+// ---- wallet (Wallet Selector). The page works read-only if the wallet libraries fail to load.
+let selector = null, modal = null, account = null;
+async function initWallet() {
+  try {
+    const { setupWalletSelector } = await import("https://cdn.jsdelivr.net/npm/@near-wallet-selector/core@10.1.4/+esm");
+    const { setupModal } = await import("https://cdn.jsdelivr.net/npm/@near-wallet-selector/modal-ui@10.1.4/+esm");
+    const { setupMyNearWallet } = await import("https://cdn.jsdelivr.net/npm/@near-wallet-selector/my-near-wallet@10.1.4/+esm");
+    selector = await setupWalletSelector({ network: "testnet", modules: [setupMyNearWallet()] });
+    // Sign-in adds a function-call key limited to check_in on our contract: daily check-ins need no pop-up.
+    modal = setupModal(selector, { contractId: CONTRACT, methodNames: ["check_in"] });
+    const upd = (accts) => { account = accts.find((a) => a.active)?.accountId || null; $("#who").textContent = account || ""; $("#connect").textContent = account ? "Disconnect" : "Connect wallet"; render(); };
+    selector.store.observable.subscribe((s) => upd(s.accounts));
+    upd(selector.store.getState().accounts);
+  } catch (e) {
+    console.error(e);
+    $("#connect").disabled = true;
+    $("#connect").textContent = "Wallet unavailable";
+  }
+}
+$("#connect").onclick = async () => {
+  if (!selector) return;
+  if (account) { const w = await selector.wallet(); await w.signOut(); } else modal.show();
+};
+
+async function callContract(method, args, depositYocto = "0", gasTgas = 50, receiver = CONTRACT) {
+  if (!selector || !account) { toast("Connect a testnet wallet first."); return null; }
+  try {
+    const w = await selector.wallet();
+    const res = await w.signAndSendTransaction({ receiverId: receiver, actions: [{ type: "FunctionCall", params: { methodName: method, args, gas: String(BigInt(gasTgas) * 10n ** 12n), deposit: depositYocto } }] });
+    const id = res?.transaction?.hash || res?.transaction_outcome?.id;
+    toast(`${esc(method)} sent${id ? ` — <a target="_blank" rel="noopener" href="${EXPLORER}/transactions/${id}">explorer</a>` : ""}`, 12000);
+    setTimeout(render, 4000);
+    return res;
+  } catch (e) { toast("Failed: " + esc(e.message || e)); return null; }
+}
+
+// ---- views
+const phaseBadge = (p) => ({ open: '<span class="badge warn">open to join</span>', running: '<span class="badge ok">running</span>', ended: '<span class="badge warn">ended, settle it</span>', settled: '<span class="badge">settled</span>', creating: '<span class="badge warn">creating</span>' }[p] || esc(p));
+const dayLine = (p) => {
+  const now = Date.now() * 1e6, start = Number(p.start_ns), len = Number(p.day_ns);
+  if (p.phase === "open" || p.phase === "creating") return `starts in ${fmtDur((start - now) / 1e9)}`;
+  if (p.phase === "running") return `day ${p.day + 1} of ${p.duration_days}, day ends in ${fmtDur((start + (p.day + 1) * len - now) / 1e9)}`;
+  return `${p.duration_days} days played`;
+};
+function fmtDur(s) { s = Math.max(0, Math.round(s)); const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60); return h ? `${h}h ${m}m` : m ? `${m}m ${s % 60}s` : `${s}s`; }
+const acct = (a) => `<a target="_blank" rel="noopener" href="${EXPLORER}/accounts/${esc(a)}">${esc(a)}</a>`;
+
+function board(p) {
+  const completed = p.phase === "running" ? p.day : p.phase === "open" ? 0 : p.duration_days;
+  return p.members.map((m) => {
+    const bits = BigInt(m.days); let sq = "";
+    for (let d = 0; d < p.duration_days; d++) {
+      const hit = (bits >> BigInt(d)) & 1n;
+      const cls = d < completed ? (hit ? "y" : "n") : (hit ? "y" : "");
+      sq += `<span class="sq ${cls} ${p.phase === "running" && d === p.day ? "now" : ""}">${d < completed ? (hit ? "✓" : "✗") : hit ? "✓" : ""}</span>`;
+    }
+    return `<tr><td>${acct(m.account)}${m.account === account ? " <span class='mut'>(you)</span>" : ""}</td><td>${sq}</td><td>${m.alive ? '<span class="badge ok">in</span>' : '<span class="badge bad">out</span>'}${m.funded ? "" : ' <span class="badge warn">staking…</span>'}</td></tr>`;
+  }).join("") || `<tr><td class="mut" colspan="3">Nobody has joined yet.</td></tr>`;
+}
+
+async function potPage(name) {
+  const p = await view(CONTRACT, "get_pot", { pot_id: name });
+  if (!p) return `<div class="card">No pot called <code>${esc(name)}</code>. <a href="#">Back</a></div>`;
+  const me = p.members.find((m) => m.account === account);
+  let props = [], policy = null;
+  try { props = await view(p.dao, "get_proposals", { from_index: 0, limit: 50 }); policy = await view(p.dao, "get_policy"); } catch (e) { console.warn(e); }
+  const stake = nearFmt(p.stake);
+  const link = location.origin + location.pathname + "#pot=" + encodeURIComponent(name);
+  const btns = [];
+  if (p.phase === "open") {
+    btns.push(me ? `<button class="ghost" data-act="leave">Leave (full refund)</button>` : `<button data-act="join">Join with ${stake} NEAR</button>`);
+  }
+  if (p.phase === "running" && me) {
+    btns.push(`<button data-act="check_in">Check in (day ${p.day + 1})</button>`);
+    btns.push(`<button class="ghost" data-act="freeze">Streak freeze (${nearFmt(p.freeze_fee)} NEAR)</button>`);
+  }
+  if ((p.phase === "ended" || p.phase === "settled") && p.payouts_pending > 0 || p.phase === "ended") btns.push(`<button data-act="settle">Settle (anyone can)</button>`);
+  return `
+  <p><a href="#">← all pots</a></p>
+  <div class="card">
+    <div class="row" style="justify-content:space-between"><h2 style="margin:0">${esc(name)}</h2>${phaseBadge(p.phase)}</div>
+    <p style="margin:6px 0">${esc(p.rule)} · stake <b>${stake} NEAR</b> · ${p.duration_days} days · fee ${p.fee_bps / 100}% · ${esc(dayLine(p))}</p>
+    <p class="mut small" style="margin:4px 0">Pot treasury (a Sputnik DAO): ${acct(p.dao)} · <a href="${EXPLORER}/accounts/${esc(p.dao)}" target="_blank" rel="noopener">explorer</a></p>
+    <div class="row" style="margin-top:8px">${btns.join("")}</div>
+    <p class="mut small">Invite link: <code>${esc(link)}</code> <button class="ghost" data-act="copy" data-v="${esc(link)}" style="padding:3px 8px">copy</button></p>
+  </div>
+  <h2>Streak board</h2>
+  <div class="card"><table><tbody>${board(p)}</tbody></table></div>
+  <h2>Payouts</h2>
+  <div class="card">${p.payouts.length ? `<table><thead><tr><th>to</th><th>what</th><th>amount</th><th>state</th></tr></thead><tbody>${p.payouts.map((x) => `<tr><td>${acct(x.to)}</td><td>${esc(x.kind)}</td><td>${nearFmt(x.amount)} NEAR</td><td>${typeof x.state === "string" ? esc(x.state) : esc(Object.keys(x.state)[0]) + " #" + esc(Object.values(x.state)[0])}</td></tr>`).join("")}</tbody></table>` : `<span class="mut">Nothing to pay yet. After the last day anyone can settle.</span>`}</div>
+  <h2>What the DAO itself says</h2>
+  <div class="card small">
+    ${policy ? `Policy roles: <b>${policy.roles.length}</b> — ${policy.roles.map((r) => `<code>${esc(r.name)}</code> = ${esc(JSON.stringify(r.kind))} may <code>${esc(r.permissions.join(", "))}</code>`).join("; ")}. Proposal bond ${nearFmt(policy.proposal_bond)} NEAR.` : `<span class="mut">Policy unavailable.</span>`}
+    <table style="margin-top:8px"><tbody>${props.map((x) => `<tr><td>#${x.id}</td><td>${x.kind.Transfer ? `Transfer ${nearFmt(x.kind.Transfer.amount)} NEAR → ${acct(x.kind.Transfer.receiver_id)}` : esc(JSON.stringify(x.kind)).slice(0, 80)}</td><td>${esc(x.status)}</td></tr>`).join("") || `<tr><td class="mut">No proposals yet.</td></tr>`}</tbody></table>
+  </div>`;
+}
+
+async function listPage() {
+  const pots = await view(CONTRACT, "list_pots", { from: 0, limit: 50 });
+  return `
+  <h2>Pots</h2>
+  ${pots.slice().reverse().map((p) => `<a href="#pot=${encodeURIComponent(p.name)}" style="text-decoration:none;color:inherit"><div class="card"><div class="row" style="justify-content:space-between"><b>${esc(p.name)}</b>${phaseBadge(p.phase)}</div><div class="mut small">${esc(p.rule)} · ${nearFmt(p.stake)} NEAR · ${p.members.length} members · ${p.members.filter((m) => m.alive).length} in · ${esc(dayLine(p))}</div></div></a>`).join("") || `<div class="card mut">No pots yet.</div>`}
+  <h2>Start a pot</h2>
+  <div class="card">
+    <div class="grid">
+      <div><label>Name (becomes <code>name.${FACTORY}</code>)</label><input id="f-name" placeholder="morning-walkers"></div>
+      <div><label>Rule</label><input id="f-rule" value="walk 20 minutes"></div>
+      <div><label>Stake (NEAR)</label><input id="f-stake" value="0.5"></div>
+      <div><label>Days</label><input id="f-days" value="7" inputmode="numeric"></div>
+      <div><label>Day length (minutes)</label><input id="f-daymin" value="1440" inputmode="numeric"></div>
+      <div><label>Join window (minutes)</label><input id="f-joinmin" value="60" inputmode="numeric"></div>
+      <div><label>Minimum members</label><input id="f-min" value="3" inputmode="numeric"></div>
+      <div><label>Fee account</label><input id="f-fee" placeholder="where the 3% goes"></div>
+    </div>
+    <p class="mut small">Creating a pot attaches <b>5.6 NEAR</b>: about 5.4 stays locked in the new DAO as storage for its code. Stakes are separate.</p>
+    <button data-act="create">Create pot</button>
+  </div>`;
+}
+
+async function render() {
+  const h = decodeURIComponent(location.hash.slice(1));
+  const name = h.startsWith("pot=") ? h.slice(4) : null;
+  try { $("#app").innerHTML = name ? await potPage(name) : await listPage(); }
+  catch (e) { $("#app").innerHTML = `<div class="card">Could not read testnet: <code>${esc(e.message)}</code></div>`; }
+}
+window.addEventListener("hashchange", render);
+
+document.addEventListener("click", async (ev) => {
+  const b = ev.target.closest("button[data-act]"); if (!b) return;
+  const name = decodeURIComponent(location.hash.slice(1).replace(/^pot=/, ""));
+  const act = b.dataset.act;
+  if (act === "copy") { await navigator.clipboard?.writeText(b.dataset.v); toast("Invite link copied."); return; }
+  if (act === "join") { const p = await view(CONTRACT, "get_pot", { pot_id: name }); await callContract("join", { pot_id: name }, p.stake, 50); }
+  if (act === "leave") await callContract("leave", { pot_id: name }, "0", 150);
+  if (act === "check_in") await callContract("check_in", { pot_id: name }, "0", 30);
+  if (act === "freeze") { const p = await view(CONTRACT, "get_pot", { pot_id: name }); await callContract("use_freeze", { pot_id: name }, p.freeze_fee, 60); }
+  if (act === "settle") await callContract("settle", { pot_id: name, batch: 3 }, "0", 300);
+  if (act === "create") {
+    const v = (id) => $(id).value.trim();
+    const args = { args: { name: v("#f-name"), rule: v("#f-rule"), stake: toYocto(v("#f-stake")), duration_days: +v("#f-days"), day_secs: Math.round(+v("#f-daymin") * 60), join_secs: Math.round(+v("#f-joinmin") * 60), min_members: +v("#f-min"), fee_account: v("#f-fee") || account, fee_bps: 300, freeze_fee: toYocto("0.05") } };
+    if (!args.args.name) return toast("Give the pot a name.");
+    const r = await callContract("create_pot", args, toYocto("5.6"), 300);
+    if (r) location.hash = "pot=" + encodeURIComponent(args.args.name);
+  }
+});
+
+setInterval(() => { if (!document.hidden && !document.activeElement?.matches("input")) render(); }, 20000);
+render();
+initWallet();
+</script>
+</body>
+</html>
