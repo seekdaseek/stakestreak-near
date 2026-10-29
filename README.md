@@ -20,6 +20,8 @@ The same author's other entry is [agentfeed-near](https://near.ochinimus.app) (t
   limited to it signs the daily check-in without a wallet pop-up.
 - The contract's block clock decides who is out. After the last day anyone calls `settle`; each
   payout is a Transfer proposal the policy approves.
+- If nobody survives, each member gets the stake back minus the fee (3%), and the fees go to the
+  fee account. The pot is never swept whole to the operator.
 - The control: the same pot as a plain 2-of-3 Sputnik multisig stalls when the losers will not vote.
 
 ## Run it
@@ -29,7 +31,7 @@ RUSTUP_TOOLCHAIN=stable cargo test
 ```
 
 Needs Rust stable with the `wasm32-unknown-unknown` target, `cargo-near` 0.22 and network access
-the first time (near-sandbox downloads its node). 14 tests, 3 to 8 minutes depending on load (10 plain `cargo test` runs in a row all passed). The tests deploy the
+the first time (near-sandbox downloads its node). 15 tests (2 of them pot scenes for both payout paths: survivors split, no survivors refunded), 3 to 8 minutes depending on load (10 plain `cargo test` runs in a row all passed). The tests deploy the
 real Sputnik factory and DAO code (`tests/fixtures`, from `sputnikv2.testnet`).
 
 ## Cost to know about

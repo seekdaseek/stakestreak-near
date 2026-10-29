@@ -201,6 +201,12 @@ pub fn split(total: u128, fee_bps: u16, survivors: u128) -> (u128, u128, u128) {
     (fee, share, pool - share * survivors)
 }
 
+/// No survivors: (fee per member, refund per member). They add up to exactly one stake.
+pub fn refund_split(stake: u128, fee_bps: u16) -> (u128, u128) {
+    let fee = stake * fee_bps as u128 / 10_000;
+    (fee, stake - fee)
+}
+
 fn transfer_kind(to: &AccountId, amount: u128) -> Value {
     json!({"Transfer": {"token_id": "", "receiver_id": to, "amount": U128(amount), "msg": null}})
 }
@@ -457,13 +463,26 @@ impl StakeStreak {
                 let total = pot.stake * funded.len() as u128;
                 let (fee, share, _dust) = split(total, pot.fee_bps, survivors.len() as u128);
                 if survivors.is_empty() {
-                    // Same as the Solana product: nobody survived, the pot goes to the fee account.
-                    pot.payouts.push(Payout {
-                        to: pot.fee_account.clone(),
-                        amount: U128(total),
-                        kind: PayKind::Fee,
-                        state: PayState::Unpaid,
-                    });
+                    // Nobody survived: every funded member gets the stake back minus the fee,
+                    // and the fees go to the fee account as one Transfer.
+                    let (fee_each, refund_each) = refund_split(pot.stake, pot.fee_bps);
+                    let fee_total = fee_each * funded.len() as u128;
+                    if fee_total > 0 {
+                        pot.payouts.push(Payout {
+                            to: pot.fee_account.clone(),
+                            amount: U128(fee_total),
+                            kind: PayKind::Fee,
+                            state: PayState::Unpaid,
+                        });
+                    }
+                    for m in &funded {
+                        pot.payouts.push(Payout {
+                            to: m.account.clone(),
+                            amount: U128(refund_each),
+                            kind: PayKind::Refund,
+                            state: PayState::Unpaid,
+                        });
+                    }
                 } else {
                     if fee > 0 {
                         pot.payouts.push(Payout {
@@ -727,5 +746,17 @@ mod tests {
         assert!(dust < 3);
         let (fee0, share0, dust0) = split(4 * ten, 0, 4);
         assert_eq!((fee0, share0, dust0), (0, ten, 0));
+    }
+
+    #[test]
+    fn refund_split_adds_up_to_one_stake() {
+        let half = 500_000_000_000_000_000_000_000u128;
+        let (fee, refund) = refund_split(half, 300);
+        assert_eq!(fee, half * 3 / 100);
+        assert_eq!(fee + refund, half);
+        assert_eq!(refund_split(half, 0), (0, half));
+        // odd stake: nothing lost to rounding
+        let (f, r) = refund_split(1_000_000_000_000_000_000_000_001, 300);
+        assert_eq!(f + r, 1_000_000_000_000_000_000_000_001);
     }
 }

@@ -62,7 +62,7 @@ internal action shape, see docs/FEEDBACK.md items 8 and 9). Join, read from chai
 signer `ochinimus.testnet` (full-access key, wallet approval), method `join`, 0.5 NEAR, 50 Tgas,
 `SuccessValue`. The pot then listed 3 funded members and the DAO held 7.08 NEAR (5.58 creation + 3 x 0.5).
 
-### streak-demo-2 run (2026-10-29), result: nobody survived, the whole pot went to the fee account
+### streak-demo-2 run (2026-10-29), result: nobody survived, the whole pot went to the fee account (old rule)
 
 Pot clock: start 18:50:44 UTC, days of 10 minutes, end 19:20:44 UTC. Test accounts m1 and m2 were driven
 by a script; the developer's wallet account `ochinimus.testnet` by hand in the browser, through the web client.
@@ -92,3 +92,13 @@ developer's account has one check-in on chain, for window 1.
 function-call key `CwaSRxWJwbcn…` added at sign-in (receiver `stakestreak-near.testnet`, method `check_in`, no deposit,
 30 Tgas), not by the full-access key, read from the `tx` RPC (`public_key`). A silent check-in is therefore proven for window 1
 only; windows 2 and 3 were not exercised through the wallet.
+
+### Contract redeployed with the new no-survivor rule (2026-10-29)
+
+The sweep above was the contract's rule at the time. It is replaced: when nobody survives, every funded
+member gets the stake back minus the fee (3% of the stake), and the fees go to the fee account as one Transfer. Tests:
+`no_survivors_refunds_stake_minus_fee` (refund path), `full_pot_pays_survivors_by_policy` (survivors split), unit test
+`refund_split_adds_up_to_one_stake`; the full suite ran green (15 tests) after the change.
+Redeploy to `stakestreak-near.testnet`: [GdUjQwvu…](https://testnet.nearblocks.io/txns/GdUjQwvuYmEqB5G2vjb2ybPqoJNgjbeFG4Lw5axBDZrm).
+On-chain code sha256 read back from the node equals the local build (`97651042…b69d9`), and `get_pot` still reads
+`streak-demo-1` and `streak-demo-2` (state layout unchanged). The new rule has **not yet run on testnet**; the recorded demo pot will show it.

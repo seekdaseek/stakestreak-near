@@ -17,14 +17,10 @@ JOIN_SECS="${JOIN_SECS:-420}"
 DAYS="${DAYS:-3}"
 EXPLORER="https://testnet.nearblocks.io/txns"
 
-send() { # label account method json deposit gas
-  out=$(near contract call-function as-transaction "$CONTRACT" "$3" json-args "$4" \
-    prepaid-gas "$6" attached-deposit "$5" sign-as "$2" network-config testnet \
-    sign-with-legacy-keychain send 2>&1) || true
-  id=$(printf '%s\n' "$out" | sed -n 's/.*Transaction ID: *\([A-Za-z0-9]*\).*/\1/p' | head -1)
-  printf '%-34s %s\n' "$1" "${id:+$EXPLORER/$id}"
-  printf '%s\n' "$out" | grep -E "Smart contract panicked|ERR_|Failure" | head -3 || true
-}
+here=$(cd "$(dirname "$0")" && pwd)
+export LOG="${LOG:-./runner-$POT.log}"
+. "$here/send-retry.sh"
+send() { send_tx "$@" || echo "GAVE UP: $1 (see $LOG)"; }
 view() { # method json
   near contract call-function as-read-only "$CONTRACT" "$1" json-args "$2" network-config testnet now 2>&1 |
     sed -n '/printed to stdout/,$p' | sed '1d' | sed '/Here is your console/,$d'

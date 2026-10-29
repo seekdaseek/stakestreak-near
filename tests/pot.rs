@@ -166,17 +166,29 @@ async fn unfilled_pot_refunds_everyone_without_fee() -> R<()> {
     Ok(())
 }
 
-/// Scene: everybody dropped out. Same as the Solana product: the pot goes to the fee account.
+/// Scene: everybody dropped out. Each funded member gets the stake back minus the fee, and the
+/// fees go to the fee account as one Transfer (no sweep of the whole pot).
 #[tokio::test]
-async fn no_survivors_sweeps_to_fee_account() -> R<()> {
+async fn no_survivors_refunds_stake_minus_fee() -> R<()> {
     let w = World::new().await?;
     let c = w.new_pot("losers", 3, 3, 300).await?;
     w.goto_day(&c.name, DAYS).await?;
     let fee_before = w.balance(&c.fee).await?;
+    let before: Vec<u128> = {
+        let mut v = vec![];
+        for m in &c.members {
+            v.push(w.balance(m).await?);
+        }
+        v
+    };
     w.settle_all(&c, 3).await?;
-    assert_eq!(w.balance(&c.fee).await? - fee_before, 3 * STAKE);
+    let fee_each = STAKE * 3 / 100;
+    assert_eq!(w.balance(&c.fee).await? - fee_before, 3 * fee_each, "fees to the fee account");
+    for (i, m) in c.members.iter().enumerate() {
+        assert_eq!(w.balance(m).await? - before[i], STAKE - fee_each, "refund of stake minus fee");
+    }
     let props = w.proposals(&c.dao).await?;
-    assert_eq!(props.len(), 1);
+    assert_eq!(props.len(), 4, "one fee transfer and three refunds");
     assert_eq!(receiver(&props[0]), c.fee.to_string());
     Ok(())
 }

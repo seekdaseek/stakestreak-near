@@ -11,7 +11,7 @@ tests run (the bytes `sputnikv2.testnet` serves, `tests/fixtures/`), not only ag
 | Daily check-in, miss a day = out | server cron sweeps | the contract's block clock: a member is in while every completed day has its bit set (`alive()`); no sweep, nobody to trust |
 | Survivors split the pot | server sends transfers | settlement fixes a payout list from the contract's books, then each payout is a Transfer proposal in the pot's DAO |
 | 3% fee | taken at lock | `fee_bps` per pot, capped at 300, taken at settlement as one more Transfer |
-| No survivors | pot swept to the revenue wallet | same: pot goes to the pot's fee account |
+| No survivors | pot swept to the revenue wallet | changed: every funded member gets the stake back minus the fee; the fees go to the fee account as one Transfer (`no_survivors_refunds_stake_minus_fee`). Reason: sweeping the whole pot to the operator looked like a trap when nobody could win |
 | Full refund before the pot starts | refund tx from treasury | `leave` before `start_ns`: a refund Transfer proposal, full stake, no fee |
 | Under 3 members at lock = refund everyone | cron `killunfilled` | pot starts below `min_members`: `settle` refunds every member in full, no fee |
 | Streak freeze (0.015 SOL, max 2, covers yesterday) | server | `use_freeze`, fee to the fee account, max 2, covers yesterday only |
