@@ -170,3 +170,7 @@ an idempotent `settle` on the already settled `streak-demo-2`, `SuccessValue`).
 
 **Deposit minimum, live:** a `create_pot` with 5.51 NEAR (one cent under the 5.52 minimum) from the server was refused by the node's
 own simulation with `Smart contract panicked: ERR_DEPOSIT_TOO_SMALL`; no transaction was sent, nothing created.
+
+### Test stability after the last change (2026-10-30)
+
+10 plain `cargo test` runs in a row against the final contract and harness: 10 of 10 passed, 18 tests each, 197 to 414 seconds per run.
