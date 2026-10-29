@@ -49,4 +49,4 @@ developer, through the web client. That is not an outside user.
 The developer's separate wallet account was funded with 2 NEAR from test account m4
 ([GrJoSv4Y…](https://testnet.nearblocks.io/txns/GrJoSv4YWPeDpbciPcUy4ndLVE9u7SCgoKbKmDYPY44Q)).
 Note: `rpc.testnet.near.org` started answering HTTP 429 "deprecated" on 2026-10-29; the client and the
-fetch script use FastNEAR's testnet RPC (`test.rpc.fastnear.com`) instead.
+fetch script use FastNEAR's testnet RPC (`rpc.testnet.fastnear.com`, then `test.rpc.fastnear.com`, then the archival RPC) instead.
