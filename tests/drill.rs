@@ -92,3 +92,55 @@ async fn settler_crash_mid_settlement_pays_only_survivors_once() -> R<()> {
     assert!(fail_text(&r).contains("ERR_NO_PAYOUT"), "{}", fail_text(&r));
     Ok(())
 }
+
+/// A payee deletes their account before settlement. Their transfer fails in the DAO (proposal
+/// `Failed`), the others are paid anyway, and once the account exists again `retry` pays it.
+#[tokio::test]
+async fn payee_with_deleted_account_is_paid_after_retry() -> R<()> {
+    let w = World::new().await?;
+    let c = w.new_pot("ghostpot", 3, 3, 0).await?;
+    for day in 0..DAYS {
+        w.goto_day(&c.name, day).await?;
+        for m in &c.members {
+            ensure_ok(&w.check_in(m, &c.name).await?, "check_in");
+        }
+    }
+    let ghost = c.members[2].clone();
+    near_api::Account(ghost.clone())
+        .delete_account_with_beneficiary(c.rando.clone())
+        .with_signer(w.signer.clone())
+        .send_to(&w.net)
+        .await?
+        .assert_success();
+    w.goto_day(&c.name, DAYS).await?;
+    let before = [w.balance(&c.members[0]).await?, w.balance(&c.members[1]).await?];
+    w.settle_all(&c, 3).await?;
+    assert_eq!(w.balance(&c.members[0]).await? - before[0], STAKE);
+    assert_eq!(w.balance(&c.members[1]).await? - before[1], STAKE);
+    let props = w.proposals(&c.dao).await?;
+    let failed: Vec<&Value> = props.iter().filter(|p| p["status"] == "Failed").collect();
+    assert_eq!(failed.len(), 1, "only the ghost's transfer failed: {props:?}");
+    assert_eq!(tr(failed[0]).0, ghost.to_string());
+
+    // while the account is gone, retry changes nothing and nobody else can take the money
+    let idx = w.pot(&c.name).await?["payouts"].as_array().unwrap().iter().position(|p| p["to"] == ghost.to_string()).unwrap();
+    let r = w.call(&c.rando, &w.streak, "retry", json!({"pot_id": c.name, "index": idx}), near(0.0), 100).await?;
+    w.wait_blocks(12).await?;
+    println!("retry while gone: success={}", r.is_success());
+    assert!(w.balance(&c.dao).await? >= STAKE, "the ghost's share is still in the treasury");
+
+    // the name is claimed again; retry now pays
+    w.create_account(&ghost, 1).await?;
+    let before_ghost = w.balance(&ghost).await?;
+    ensure_ok(&w.call(&c.rando, &w.streak, "retry", json!({"pot_id": c.name, "index": idx}), near(0.0), 100).await?, "retry");
+    w.wait_blocks(12).await?;
+    assert_eq!(w.balance(&ghost).await? - before_ghost, STAKE);
+    let props = w.proposals(&c.dao).await?;
+    assert!(props.iter().all(|p| p["status"] == "Approved"));
+    // a healthy payout cannot be paid twice by retry
+    let healthy = if idx == 0 { 1 } else { 0 };
+    let _ = w.call(&c.rando, &w.streak, "retry", json!({"pot_id": c.name, "index": healthy}), near(0.0), 100).await?;
+    w.wait_blocks(12).await?;
+    assert_eq!(w.balance(&c.members[0]).await? - before[0], STAKE);
+    Ok(())
+}

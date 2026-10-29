@@ -517,6 +517,31 @@ impl StakeStreak {
         self.start_pay(&pot_id, index).into()
     }
 
+    /// Re-run an approved payout whose transfer failed in the DAO (for example the payee's account
+    /// was deleted). Sputnik marks such a proposal `Failed`; `Finalize` executes it again. Anyone can
+    /// call it. The money only ever goes to the same receiver, so if the account does not exist the
+    /// funds wait in the treasury until it does. On a payout that already went through, the DAO
+    /// refuses the Finalize and nothing changes.
+    pub fn retry(&mut self, pot_id: String, index: u32) -> Promise {
+        let pot = self.pots.get(&pot_id).unwrap_or_else(|| env::panic_str("ERR_NO_POT"));
+        let p = pot.payouts.get(index as usize).unwrap_or_else(|| env::panic_str("ERR_NO_PAYOUT"));
+        let PayState::Approved(id) = p.state else {
+            env::panic_str("ERR_NOT_APPROVED_YET")
+        };
+        Promise::new(pot.dao.clone()).function_call(
+            "act_proposal".to_string(),
+            serde_json::to_vec(&json!({
+                "id": id,
+                "action": "Finalize",
+                "proposal": transfer_kind(&p.to, p.amount.0),
+                "memo": null,
+            }))
+            .unwrap(),
+            NearToken::from_yoctonear(0),
+            GAS_ACT_PROPOSAL,
+        )
+    }
+
     #[private]
     pub fn on_filed(&mut self, pot_id: String, index: u32) -> PromiseOrValue<()> {
         let id: u64 = match env::promise_result_checked(0, 64) {
