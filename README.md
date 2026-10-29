@@ -29,7 +29,7 @@ RUSTUP_TOOLCHAIN=stable cargo test
 ```
 
 Needs Rust stable with the `wasm32-unknown-unknown` target, `cargo-near` 0.22 and network access
-the first time (near-sandbox downloads its node). 13 tests, about 2.5 minutes. The tests deploy the
+the first time (near-sandbox downloads its node). 14 tests, 3 to 8 minutes depending on load (10 plain `cargo test` runs in a row all passed). The tests deploy the
 real Sputnik factory and DAO code (`tests/fixtures`, from `sputnikv2.testnet`).
 
 ## Cost to know about
@@ -38,6 +38,6 @@ One pot DAO needs about 5.6 NEAR attached on `create_pot`, locked in the DAO (st
 
 ## Not done yet
 
-Testnet deployment, web client, results script, video. See [CHECKLIST.md](CHECKLIST.md).
+The control on testnet, results script, one-command demo, video. Testnet contract: `stakestreak-near.testnet`; first settled pot and links in [docs/TESTNET.md](docs/TESTNET.md). Web client: `web/index.html` (static; serve the folder). See [CHECKLIST.md](CHECKLIST.md).
 
 MIT licensed.

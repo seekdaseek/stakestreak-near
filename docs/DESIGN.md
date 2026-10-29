@@ -70,6 +70,8 @@ or two callers racing cannot pay anyone twice (the race produced one extra propo
 approved, see the drill test). Equal split is `floor(pool / survivors)`; the few yoctoNEAR of dust
 stay in the DAO.
 
+If a payee's account was deleted, the DAO's transfer fails and Sputnik marks the proposal `Failed`; `retry(pot_id, index)` (anyone) sends `Finalize` to run it again. The funds only ever go to the same receiver, so they wait in the treasury until that account exists again (`payee_with_deleted_account_is_paid_after_retry`).
+
 ## Cost of one pot DAO (the number that looks bad)
 
 The deployed factory's `create` refuses less than `code_len + 32` bytes of storage:
