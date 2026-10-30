@@ -10,8 +10,9 @@ Things we hit building this, each with how it showed up. Written as we go; dates
    one needs 5.3968 NEAR (it stores the DAO code locally: `code_len + 32` bytes of storage). We only
    found out by running the deployed bytes in a sandbox. Suggestion: publish the commit that built
    each registered code hash, and state the real minimum deposit in the docs.
-2. **A DAO costs about 5.4 NEAR in locked storage on the deployed factory**, which makes
-   "one DAO per small group" expensive on mainnet. The `main` source uses global contracts, which
+2. **A DAO costs about 5.4 NEAR in locked storage on the deployed testnet factory**, which would make
+   "one DAO per small group" expensive, but the mainnet factory already uses a global contract (about 0.1 NEAR per DAO), so the testnet factory
+   is out of step with mainnet; please say so in the docs. The `main` source uses global contracts, which
    would remove most of that cost.
 3. **`create` needs more than 80 Tgas** when called from a contract (we use 240); the factory's own
    constants suggest far less.

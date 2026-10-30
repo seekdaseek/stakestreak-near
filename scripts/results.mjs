@@ -44,7 +44,10 @@ let totalIn = 0n, totalOut = 0n, win = 0n, refund = 0n, fee = 0n, proposals = 0;
 const rows = [];
 for (const p of pots) {
   const funded = p.members.filter((m) => m.funded);
-  const stakeIn = BigInt(p.stake) * BigInt(funded.length);
+  // A member who left before the start is no longer in the member list, but their stake went in and came back as a Refund payout.
+  const memberSet = new Set(p.members.map((m) => m.account));
+  const leftRefunds = p.payouts.filter((x) => x.kind === "Refund" && !memberSet.has(x.to) && "Approved" in x.state).reduce((n, x) => n + BigInt(x.amount), 0n);
+  const stakeIn = BigInt(p.stake) * BigInt(funded.length) + leftRefunds;
   let w = 0n, r = 0n, f = 0n, n = 0;
   for (const x of p.payouts) {
     if (!("Approved" in x.state)) continue;

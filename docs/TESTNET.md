@@ -189,3 +189,33 @@ and the contract's limits (2 to 90 days, 2 to 20 minimum members, stake at least
 120 characters). Each limit was checked against the deployed contract: eight out-of-range `create_pot` calls were each refused by the
 node's simulation with the matching `ERR_...` (no transaction sent, no pot created). Gas used by the page (join 50, check_in 30,
 use_freeze 60, leave 150, settle 300 with batch 3, create_pot 300 Tgas) is what succeeded on testnet in the pots above.
+
+## Pot 4: `streak-demo-4`, the recorded demo (2026-10-30)
+
+0.5 NEAR stakes, 3 days of 2 minutes, 3% fee, minimum 3 members, join window 8 minutes, DAO
+[`streak-demo-4.sputnikv2.testnet`](https://testnet.nearblocks.io/address/streak-demo-4.sputnikv2.testnet). Two test members were driven by
+scripts on the server (`scripts/testnet-demo-pot.sh`, 0 give-ups); the third member was a separate wallet held by the developer, through the hosted
+web client (https://stakestreak-near.pages.dev), signing with Meteor Wallet. Not an outside user.
+Times are UTC (Chisinau is UTC+2): start 06:08:02, days 06:08:02, 06:10:02, 06:12:02, end 06:14:02.
+
+| Step | Transaction |
+|---|---|
+| m2 creates the pot, 5.6 NEAR attached | [6zjjGiXz…](https://testnet.nearblocks.io/txns/6zjjGiXze43ugvJ3xto93XhGq6iNvZcAWHjmPLjuW9ME) |
+| m1, m2 join (server) | [m1](https://testnet.nearblocks.io/txns/qQjvdsHqMC2AJvhW3uBtYrf1xetgKVeZJNj7EUfhWEx), [m2](https://testnet.nearblocks.io/txns/G9wbtwzMAZg5fJ1zZYWiCzEkxHiDU6aL5HVwbYFnxpgp) |
+| Wallet sign-in adds a function-call key limited to `check_in` (06:02:44, full-access key, Meteor approval) | [J6qqqjya…](https://testnet.nearblocks.io/txns/J6qqqjyaSd6NtEvBy6JsACTqNoTbE5fLYobBYbUGZd21) |
+| Wallet joins with 0.5 NEAR (06:03:02, full-access key, Meteor "Approve Transaction") | [5emLxW7T…](https://testnet.nearblocks.io/txns/5emLxW7TJzV66f8TBWcEptnrDkw7VYZ55bkQWUGVXjjn) |
+| Day 1: m1, m2 (server) | [m1](https://testnet.nearblocks.io/txns/AGQz6qWz8YtA29EsiBaCqne9cc9zqMf6fgwWN1g5TvAZ), [m2](https://testnet.nearblocks.io/txns/DuDrcW6KekmTkjALWC1Spim7vLu5dYnquiDpWSzE98fq) |
+| Day 1: wallet check-in (06:08:18, function-call key) and a second one (06:08:31, same key; both returned day 0, the second changes nothing) | [2F7N4Zyk…](https://testnet.nearblocks.io/txns/2F7N4ZykfXwiRgsV5aRLkCybccJwHXrvYeAdutPQTHPS), [GA73WzDf…](https://testnet.nearblocks.io/txns/GA73WzDfAd6FSAxFqmwD6PYnCgqVGUvQ9kxdmKrTSaRj) |
+| Day 2: m1 (server); m2 skips | [m1](https://testnet.nearblocks.io/txns/8XHEBvmEkRmSyusi1raDsgG93XoqoP6xaqXmM7fgnUmU) |
+| Day 2: wallet check-in (06:10:16, function-call key) | [GPKmxYza…](https://testnet.nearblocks.io/txns/GPKmxYza3S983krgtz4yH6zngq5DcGm6W41nsRwrKxgL) |
+| Day 3: m1 (server) | [m1](https://testnet.nearblocks.io/txns/3nbQFGXJSKCCCPcstCpLD5aLAgGUmjFz35Jrsu2ReeTA) |
+| Day 3: wallet check-in (06:12:15, function-call key) | [5yUvAXzX…](https://testnet.nearblocks.io/txns/5yUvAXzXndaunpkjB5YjnEnLAWakiZiQA5msh2NaaV3k) |
+| Settle (server) | [4FHg5XuE…](https://testnet.nearblocks.io/txns/4FHg5XuE8Nwo2tz92Y6bQiK5PTvLMv4K5kgU7wNgra3J) |
+
+**No wallet pop-up on check-ins.** All four check-in transactions of the wallet account, read from the `tx` RPC by hash, were signed by the function-call key
+`B6okhM8U…` (receiver the contract, method `check_in`, deposit 0), never by the full-access key. Only the sign-in and the join needed Meteor approval. The return
+values of the three days' check-ins were 0, 1, 2 (the day index).
+
+Read back by view calls: `settled`, 0 pending; m1 `alive`, 3 check-ins, mask `7`; m2 out, 1 check-in, mask `1`; the wallet `alive`, 3 check-ins, mask `7`.
+Three Transfer proposals, all `Approved`, proposed by the contract: 0.045 NEAR to the fee account, 0.7275 NEAR to m1, 0.7275 NEAR to the wallet ((1.5 - 0.045) / 2).
+The wallet's balance read 1.7255 NEAR afterwards. The DAO is left at 5.58 NEAR (see the cost section in [SUBMISSION.md](SUBMISSION.md)).
