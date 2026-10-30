@@ -82,7 +82,7 @@ contract (the web client attaches 5.6). The 5.5 is measured, not guessed: the DA
 just to exist (the node refused a create with 5.4: "remaining balance will not be enough to cover storage"), and its
 storage grows 273 bytes per Transfer proposal from a base of 540,327 bytes, so the largest pot (20 members, 21
 payouts) needs 5.4606 NEAR of storage plus about 0.003 NEAR of the DAO's own gas. 5.5 leaves about 0.036 NEAR spare.
-Below the minimum `create_pot` refuses up front (`one_yocto_under_the_minimum_is_refused`); at exactly the minimum a pot
+The minimum is a per-deployment init value (`new(factory, min_dao_deposit)`, default 5.5 NEAR; `migrate` adds it to the earlier state layout), because it depends on the factory: a factory that uses a global contract needs a small fraction. A value under 0.01 NEAR cannot be deployed. Below the minimum `create_pot` refuses up front (`one_yocto_under_the_minimum_is_refused`); at exactly the minimum a pot
 is created and settles with the DAO still covering its storage (`exactly_the_minimum_creates_and_settles`, 0.088 NEAR
 spare after 4 payouts). That NEAR is storage staking for the DAO's copy
 of the code: it stays in the DAO and is not recoverable, so it is a per-pot cost of the

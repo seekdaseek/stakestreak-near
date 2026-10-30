@@ -31,7 +31,7 @@ RUSTUP_TOOLCHAIN=stable cargo test
 ```
 
 Needs Rust stable with the `wasm32-unknown-unknown` target, `cargo-near` 0.22 and network access
-the first time (near-sandbox downloads its node). 18 tests (pot scenes for both payout paths, survivors split and no survivors refunded, and the create-deposit boundary), 3 to 7 minutes depending on load (the last 10 plain `cargo test` runs in a row, after the final contract and harness change, all passed: 18 tests each, 197 to 414 s). The tests deploy the
+the first time (near-sandbox downloads its node). 22 tests (pot scenes for both payout paths, survivors split and no survivors refunded, the create-deposit boundary, the per-deployment minimum and the migration), 3 to 7 minutes depending on load (the last 10 plain `cargo test` runs in a row, after the final contract and harness change, all passed: 18 tests each, 197 to 414 s). The tests deploy the
 real Sputnik factory and DAO code (`tests/fixtures`, from `sputnikv2.testnet`).
 
 ## One-command demo

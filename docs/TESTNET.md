@@ -219,3 +219,13 @@ values of the three days' check-ins were 0, 1, 2 (the day index).
 Read back by view calls: `settled`, 0 pending; m1 `alive`, 3 check-ins, mask `7`; m2 out, 1 check-in, mask `1`; the wallet `alive`, 3 check-ins, mask `7`.
 Three Transfer proposals, all `Approved`, proposed by the contract: 0.045 NEAR to the fee account, 0.7275 NEAR to m1, 0.7275 NEAR to the wallet ((1.5 - 0.045) / 2).
 The wallet's balance read 1.7255 NEAR afterwards. The DAO is left at 5.58 NEAR (see the cost section in [SUBMISSION.md](SUBMISSION.md)).
+
+### Contract redeployed: per-deployment create minimum (2026-10-30)
+
+`MIN_DAO_DEPOSIT` is no longer a compile-time constant: `new(factory, min_dao_deposit)` sets it (default 5.5 NEAR, at least 0.01 NEAR) and
+`migrate(min_dao_deposit)` adds it to the earlier state layout, keeping every pot. Tests: `minimum_is_set_per_deployment` (a second
+deployment on the same factory with 6 NEAR refuses 5.6 and accepts 6.02; a value under the floor cannot be deployed),
+`migrate_keeps_pots_and_adds_the_minimum` (the real previous wasm, `tests/fixtures/stakestreak_v1.wasm`, a pot created on it, the new code deployed over it with
+`migrate`, the pot unchanged, the new rule live), plus unit tests for the default and the floor. Full suite once: 22 passed.
+Deploy and migrate in one transaction: [5ih5Gz8B…](https://testnet.nearblocks.io/txns/5ih5Gz8BBxhLWdz73VcdREPGU8GahxwDoa6noMQsUv19). On-chain code sha256
+`e1fcaf14…c08e` equals the local build; `get_min_dao_deposit` reads 5.5 NEAR; `streak-demo-1` to `-4` still read as settled with their payouts. Testnet only; nothing was sent to mainnet.

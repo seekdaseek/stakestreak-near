@@ -53,14 +53,14 @@ The other 0.169 NEAR is spare. All testnet NEAR here came from the faucet, so th
 
 Five DAOs exist on testnet from our runs (pots 1 to 4 and the control), about 27.9 NEAR locked, all faucet NEAR.
 
-**What would a pot cost on mainnet?** Probably far less, but this is measured on other people's DAOs, not on a pot of ours.
+**What would a pot cost on mainnet?** Probably far less. The storage numbers below were **measured on other people's DAOs, not on a pot of ours**: no DAO of ours exists on mainnet and nothing was sent there.
 The mainnet factory `sputnik-dao.near` (read-only RPC calls, nothing sent) now creates DAOs that run a **global contract**
 (`global_contract_hash` `DtHZA1mU…`, local code hash empty). The three newest DAOs on it (2,040 in total) use 2,310 to 5,927 bytes of storage
 (0.023 to 0.059 NEAR) and hold about 0.09 NEAR. The testnet factory we tested against predates that and stores the 540 KB code in each DAO.
 So on mainnet one pot DAO should cost about 0.1 to 0.2 NEAR (our policy and up to 21 proposals add a little), not 5.5.
 **Not verified:** nobody has created a DAO through the mainnet factory with our policy; our sandbox tests run the testnet DAO code, which is
-not the mainnet code; and the contract's minimum deposit is a compile-time constant (5.5 NEAR) tuned for the testnet factory. A mainnet build
-would need its own minimum and a test run against the mainnet DAO code first.
+not the mainnet code; and the contract's minimum deposit was tuned for the testnet factory (5.5 NEAR). It is now a per-deployment init value (`new(factory, min_dao_deposit)`, tested), so a mainnet
+deployment would set its own; it still needs a test run against the mainnet DAO code first.
 
 **Fixes that exist, with their price:**
 1. *Use the global-contract factory (mainnet as it is today).* Cuts the cost about 30 to 50 times with no design change. Needs a mainnet minimum

@@ -14,7 +14,7 @@ pub const NEAR: u128 = 1_000_000_000_000_000_000_000_000;
 /// Build the contract once per test binary. The ABI step is skipped: cargo-near's ABI generation
 /// dlopen()s a freshly built dylib, which hung for 16 minutes with 0% CPU on macOS (dyld, 2026-10-29),
 /// and no test reads the ABI. The ABI is still built and embedded for the deployed wasm (`cargo near build`).
-fn contract_wasm() -> R<Vec<u8>> {
+pub fn contract_wasm() -> R<Vec<u8>> {
     static WASM: std::sync::OnceLock<Vec<u8>> = std::sync::OnceLock::new();
     if let Some(w) = WASM.get() {
         return Ok(w.clone());
@@ -113,6 +113,18 @@ impl World {
             self.sandbox.fast_forward(3).await?;
         }
         panic!("account {id} never became visible");
+    }
+
+    /// Deploy `wasm` on an existing account and run `method` with `args` as the init call.
+    pub async fn deploy_at(&self, id: &AccountId, wasm: Vec<u8>, method: &str, args: Value) -> R<near_api::types::transaction::result::ExecutionFinalResult> {
+        Ok(near_api::Contract::deploy(id.clone())
+            .use_code(wasm)
+            .with_init_call(method, args)?
+            .with_signer(self.signer.clone())
+            .send_to(&self.net)
+            .await?
+            .into_full()
+            .ok_or("transaction still pending")?)
     }
 
     pub async fn user(&self, name: &str) -> R<AccountId> {

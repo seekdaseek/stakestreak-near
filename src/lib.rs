@@ -25,7 +25,9 @@ const STORAGE_RESERVE: NearToken = NearToken::from_millinear(20);
 /// 273 bytes per proposal, at most MAX_MEMBERS + 1 proposals = 5.4606 NEAR) plus the DAO's own gas
 /// (about 0.003 NEAR for that many callbacks), with a margin of about 0.036 NEAR. The factory itself
 /// refuses less than 5.3968, and the account less than about 5.404, so the old 5.4 could be refused.
-const MIN_DAO_DEPOSIT: NearToken = NearToken::from_millinear(5_500);
+const DEFAULT_MIN_DAO_DEPOSIT: NearToken = NearToken::from_millinear(5_500);
+/// Whatever a deployment sets, it may not be set below this: a DAO account cannot exist on less.
+const FLOOR_MIN_DAO_DEPOSIT: NearToken = NearToken::from_millinear(10);
 /// A Sputnik proposal that nobody approves for a year expires; ours are approved in the same chain.
 const PROPOSAL_PERIOD_NS: &str = "31536000000000000";
 
@@ -154,6 +156,21 @@ pub struct PotView {
 pub struct StakeStreak {
     factory: AccountId,
     pots: IterableMap<String, Pot>,
+    /// Least the pot's DAO may be created with (yoctoNEAR), set per deployment: it depends on the factory.
+    min_dao_deposit: u128,
+}
+
+/// The state before `min_dao_deposit` existed (the testnet deployment of 2026-10-29 to 2026-10-30).
+#[near(serializers = [borsh])]
+struct StakeStreakV1 {
+    factory: AccountId,
+    pots: IterableMap<String, Pot>,
+}
+
+fn checked_min_deposit(min_dao_deposit: Option<U128>) -> u128 {
+    let m = min_dao_deposit.map(|v| v.0).unwrap_or(DEFAULT_MIN_DAO_DEPOSIT.as_yoctonear());
+    require!(m >= FLOOR_MIN_DAO_DEPOSIT.as_yoctonear(), "ERR_MIN_DEPOSIT_TOO_SMALL");
+    m
 }
 
 #[derive(PartialEq, Clone, Copy, Debug)]
@@ -217,11 +234,27 @@ fn transfer_kind(to: &AccountId, amount: u128) -> Value {
 
 #[near]
 impl StakeStreak {
+    /// `min_dao_deposit` (yoctoNEAR) is the least the pot's DAO is created with. It depends on the
+    /// factory: the testnet one stores a 540 KB copy of the DAO code in every DAO (5.5 NEAR, the
+    /// default), a factory that uses a global contract needs a small fraction of that.
     #[init]
-    pub fn new(factory: AccountId) -> Self {
+    pub fn new(factory: AccountId, min_dao_deposit: Option<U128>) -> Self {
         Self {
             factory,
             pots: IterableMap::new(b"p"),
+            min_dao_deposit: checked_min_deposit(min_dao_deposit),
+        }
+    }
+
+    /// Redeploy over the previous layout: keeps the factory and every pot, adds the minimum.
+    #[private]
+    #[init(ignore_state)]
+    pub fn migrate(min_dao_deposit: Option<U128>) -> Self {
+        let old: StakeStreakV1 = env::state_read().unwrap_or_else(|| env::panic_str("ERR_NO_OLD_STATE"));
+        Self {
+            factory: old.factory,
+            pots: old.pots,
+            min_dao_deposit: checked_min_deposit(min_dao_deposit),
         }
     }
 
@@ -233,7 +266,7 @@ impl StakeStreak {
         let creator = env::predecessor_account_id();
         let attached = env::attached_deposit();
         require!(
-            attached >= STORAGE_RESERVE.saturating_add(MIN_DAO_DEPOSIT),
+            attached.as_yoctonear() >= STORAGE_RESERVE.as_yoctonear() + self.min_dao_deposit,
             "ERR_DEPOSIT_TOO_SMALL"
         );
         require!(!self.pots.contains_key(&args.name), "ERR_POT_EXISTS");
@@ -612,6 +645,10 @@ impl StakeStreak {
             .collect()
     }
 
+    pub fn get_min_dao_deposit(&self) -> U128 {
+        U128(self.min_dao_deposit)
+    }
+
     pub fn get_factory(&self) -> AccountId {
         self.factory.clone()
     }
@@ -758,7 +795,19 @@ mod tests {
         let worst_bytes = 540_327u128 + 273 * (MAX_MEMBERS as u128 + 1);
         let storage = worst_bytes * 10u128.pow(19);
         let dao_gas = 3_000_000_000_000_000_000_000u128; // 0.003 NEAR, generous for 21 callbacks
-        assert!(MIN_DAO_DEPOSIT.as_yoctonear() >= storage + dao_gas + 30_000_000_000_000_000_000_000);
+        assert!(DEFAULT_MIN_DAO_DEPOSIT.as_yoctonear() >= storage + dao_gas + 30_000_000_000_000_000_000_000);
+    }
+
+    #[test]
+    fn min_deposit_default_and_floor() {
+        assert_eq!(checked_min_deposit(None), DEFAULT_MIN_DAO_DEPOSIT.as_yoctonear());
+        assert_eq!(checked_min_deposit(Some(U128(123_000_000_000_000_000_000_000))), 123_000_000_000_000_000_000_000);
+    }
+
+    #[test]
+    #[should_panic(expected = "ERR_MIN_DEPOSIT_TOO_SMALL")]
+    fn min_deposit_below_floor_is_refused() {
+        checked_min_deposit(Some(U128(1)));
     }
 
     #[test]
