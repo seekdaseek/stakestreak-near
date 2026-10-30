@@ -174,3 +174,11 @@ own simulation with `Smart contract panicked: ERR_DEPOSIT_TOO_SMALL`; no transac
 ### Test stability after the last change (2026-10-30)
 
 10 plain `cargo test` runs in a row against the final contract and harness: 10 of 10 passed, 18 tests each, 197 to 414 seconds per run.
+
+### Hosted web client (2026-10-30)
+
+`web/` is hosted as Cloudflare Pages project `stakestreak-near`: https://stakestreak-near.pages.dev. Checked live: `/` answers 200 and its
+bytes hash to the repo's `web/index.html` (`1e9e2c84…7ec1`), `actions.js` hashes to `b52dcb84…c9f4`, the headers from `_headers`
+(no-cache, nosniff, no-referrer) are applied (the file itself is not served), the pot list loads all three settled pots, a pot page shows
+the streak board, payouts and the DAO policy, the wallet modal lists Meteor Wallet only (no sign-in done), no console errors, and the
+page's requests go only to the host, jsDelivr and `rpc.testnet.fastnear.com`.

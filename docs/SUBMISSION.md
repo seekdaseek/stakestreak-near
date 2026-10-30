@@ -15,7 +15,7 @@ Refresh the numbers from [RESULTS.md](RESULTS.md) (`node scripts/results.mjs`) r
 >
 > Disclosures: the product exists on Solana; only the NEAR integration (written from 2026-10-19) is the submission. Written with AI coding assistance, as the rules allow (Q-005). Same author's other entry: agentfeed-near (track `agents`).
 >
-> Try it: `cargo test --test demo -- --ignored --nocapture` tells one whole pot in about a minute; the web client in `web/` joins a testnet pot with Meteor Wallet.
+> Try it: `cargo test --test demo -- --ignored --nocapture` tells one whole pot in about a minute; the hosted web client at https://stakestreak-near.pages.dev joins a testnet pot with Meteor Wallet.
 
 Quoted text: 1,724 characters when drafted (counted by script); recount after any edit.
 

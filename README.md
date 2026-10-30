@@ -93,6 +93,6 @@ One pot DAO needs about 5.6 NEAR attached on `create_pot`, locked in the DAO (st
 
 ## Not done yet
 
-A freeze/leave pot on testnet, video. The control ran on testnet (`streak-control-1`). Testnet contract: `stakestreak-near.testnet`; pots and links in [docs/TESTNET.md](docs/TESTNET.md). Web client: `web/index.html` (static; serve the folder). Counts of what ran on testnet: [docs/RESULTS.md](docs/RESULTS.md), written by `node scripts/results.mjs`. See [CHECKLIST.md](CHECKLIST.md).
+A freeze/leave pot on testnet, video. The control ran on testnet (`streak-control-1`). Testnet contract: `stakestreak-near.testnet`; pots and links in [docs/TESTNET.md](docs/TESTNET.md). Web client: `web/` (static), hosted at https://stakestreak-near.pages.dev (Cloudflare Pages, no backend: it reads testnet through FastNEAR RPCs and signs with Meteor Wallet). Counts of what ran on testnet: [docs/RESULTS.md](docs/RESULTS.md), written by `node scripts/results.mjs`. See [CHECKLIST.md](CHECKLIST.md).
 
 MIT licensed.
