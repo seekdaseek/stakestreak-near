@@ -16,7 +16,7 @@ reached the chain and nobody survived.
    of `PLAN`. Give them the exact UTC times: each day opens at `start + d x day length`.
 4. **After the end, check by view calls, not by the log:** `get_pot` (members, `days`, `alive`,
    `payouts`, `payouts_pending`), `get_proposals` on the pot's DAO, and the `view_account`
-   balances. Record transaction links as `testnet.nearblocks.io/txns/<hash>`.
+   balances. Record transaction links as `testnet.near.rocks/tx/<hash>`.
 5. **Which key signed?** `tx` RPC, `transaction.public_key`: the function-call key added at sign-in
    means no wallet pop-up was needed; the full-access key means the wallet asked.
 

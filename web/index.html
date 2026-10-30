@@ -51,7 +51,7 @@ const FACTORY = "sputnikv2.testnet";
 // rpc.testnet.near.org is deprecated and unreachable from browsers (Oct 2026). Tried in order; the last one that worked is tried first.
 const RPCS = ["https://rpc.testnet.fastnear.com", "https://test.rpc.fastnear.com", "https://archival-rpc.testnet.near.org"];
 const RPC = RPCS[0];
-const EXPLORER = "https://testnet.nearblocks.io";
+const EXPLORER = "https://testnet.near.rocks";
 const NEAR = 10n ** 24n;
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -114,7 +114,7 @@ async function callContract(method, args, depositYocto = "0", gasTgas = 50, rece
     // near-js Action objects, not the internal { type, params } shape: Meteor throws "Unsupported NAJ action" on the latter.
     const res = await w.signAndSendTransaction({ receiverId: receiver, actions: [functionCallAction(actionCreators, { method, args, gasTgas, depositYocto })] });
     const id = res?.transaction?.hash || res?.transaction_outcome?.id;
-    toast(`${esc(method)} sent${id ? ` — <a target="_blank" rel="noopener" href="${EXPLORER}/txns/${id}">explorer</a>` : ""}`, 12000);
+    toast(`${esc(method)} sent${id ? ` — <a target="_blank" rel="noopener" href="${EXPLORER}/tx/${id}">explorer</a>` : ""}`, 12000);
     setTimeout(render, 4000);
     return res;
   } catch (e) { toast("Failed: " + esc(e.message || e)); return null; }
@@ -129,7 +129,7 @@ const dayLine = (p) => {
   return `${p.duration_days} days played`;
 };
 function fmtDur(s) { s = Math.max(0, Math.round(s)); const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60); return h ? `${h}h ${m}m` : m ? `${m}m ${s % 60}s` : `${s}s`; }
-const acct = (a) => `<a target="_blank" rel="noopener" href="${EXPLORER}/address/${esc(a)}">${esc(a)}</a>`;
+const acct = (a) => `<a target="_blank" rel="noopener" href="${EXPLORER}/account/${esc(a)}">${esc(a)}</a>`;
 
 function board(p) {
   const completed = p.phase === "running" ? p.day : p.phase === "open" ? 0 : p.duration_days;
@@ -166,7 +166,7 @@ async function potPage(name) {
   <div class="card">
     <div class="row" style="justify-content:space-between"><h2 style="margin:0">${esc(name)}</h2>${phaseBadge(p.phase)}</div>
     <p style="margin:6px 0">${esc(p.rule)} · stake <b>${stake} NEAR</b> · ${p.duration_days} days · fee ${p.fee_bps / 100}% · ${esc(dayLine(p))}</p>
-    <p class="mut small" style="margin:4px 0">Pot treasury (a Sputnik DAO): ${acct(p.dao)} · <a href="${EXPLORER}/address/${esc(p.dao)}" target="_blank" rel="noopener">explorer</a></p>
+    <p class="mut small" style="margin:4px 0">Pot treasury (a Sputnik DAO): ${acct(p.dao)} · <a href="${EXPLORER}/account/${esc(p.dao)}" target="_blank" rel="noopener">explorer</a></p>
     <div class="row" style="margin-top:8px">${btns.join("")}</div>
     <p class="mut small">Invite link: <code>${esc(link)}</code> <button class="ghost" data-act="copy" data-v="${esc(link)}" style="padding:3px 8px">copy</button></p>
   </div>

@@ -9,7 +9,7 @@
 # so a failure leaves its error text behind. Sets TX_ID (empty if all attempts failed) and
 # returns 0 when the transaction reached the chain, 1 otherwise.
 CONTRACT="${CONTRACT:-stakestreak-near.testnet}"
-EXPLORER="${EXPLORER:-https://testnet.nearblocks.io/txns}"
+EXPLORER="${EXPLORER:-https://testnet.near.rocks/tx}"
 TRIES="${TRIES:-3}"
 RETRY_WAIT="${RETRY_WAIT:-6}"
 LOG="${LOG:-./runner.log}"

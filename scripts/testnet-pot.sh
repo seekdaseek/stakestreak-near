@@ -15,7 +15,7 @@ STAKE_YOCTO="${STAKE_YOCTO:-500000000000000000000000}"
 DAY_SECS="${DAY_SECS:-600}"
 JOIN_SECS="${JOIN_SECS:-420}"
 DAYS="${DAYS:-3}"
-EXPLORER="https://testnet.nearblocks.io/txns"
+EXPLORER="https://testnet.near.rocks/tx"
 
 here=$(cd "$(dirname "$0")" && pwd)
 export LOG="${LOG:-./runner-$POT.log}"
@@ -65,4 +65,4 @@ while [ "$i" -lt 6 ]; do
 done
 echo "== DAO proposals"
 near contract call-function as-read-only "$POT.$FACTORY" get_proposals json-args '{"from_index":0,"limit":20}' network-config testnet now 2>&1 | grep -E '"id"|"status"|receiver_id|"amount"' | paste - - - -
-echo "DAO: https://testnet.nearblocks.io/address/$POT.$FACTORY"
+echo "DAO: https://testnet.near.rocks/account/$POT.$FACTORY"

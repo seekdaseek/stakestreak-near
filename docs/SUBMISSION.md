@@ -38,7 +38,7 @@ The 5.5 NEAR per pot is a property of the testnet factory, not of the design; se
 ## What a pot costs, honestly (the number that looks bad)
 
 **Who paid for `streak-demo-4`'s DAO, and where is the money?** The creator account of the run (a test account, `create_pot` with 5.6 NEAR
-attached, [6zjjGiXz…](https://testnet.nearblocks.io/txns/6zjjGiXze43ugvJ3xto93XhGq6iNvZcAWHjmPLjuW9ME)). The contract keeps 0.02 NEAR and
+attached, [6zjjGiXz…](https://testnet.near.rocks/tx/6zjjGiXze43ugvJ3xto93XhGq6iNvZcAWHjmPLjuW9ME)). The contract keeps 0.02 NEAR and
 forwards 5.58 NEAR to the Sputnik factory, which creates `streak-demo-4.sputnikv2.testnet` with that balance. After the full 1.5 NEAR payout the DAO
 still holds exactly 5.58 NEAR (read from the node). Of that, **5.411 NEAR is storage staking**: the DAO account's storage is 541,136 bytes
 (0.00001 NEAR per byte), almost all of it a copy of the DAO's own wasm (about 540 KB) that the testnet factory stores inside every DAO.

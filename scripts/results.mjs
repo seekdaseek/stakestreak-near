@@ -9,7 +9,7 @@ import { dirname, join } from "node:path";
 const CONTRACT = process.env.CONTRACT || "stakestreak-near.testnet";
 const RPCS = ["https://rpc.testnet.fastnear.com", "https://test.rpc.fastnear.com", "https://archival-rpc.testnet.near.org"];
 const OWN = new RegExp(process.env.OWN_PATTERN || "^stakestreak-near-");
-const EXPL = "https://testnet.nearblocks.io";
+const EXPL = "https://testnet.near.rocks";
 const NEAR = 10n ** 24n;
 const fmt = (y) => { const n = BigInt(y); const w = n / NEAR, f = (n % NEAR) / 10n ** 18n; return `${w}.${String(f).padStart(6, "0")}`.replace(/0+$/, "").replace(/\.$/, ".0"); };
 
@@ -57,7 +57,7 @@ for (const p of pots) {
   }
   if (ph(p) === "settled") { totalIn += stakeIn; win += w; refund += r; fee += f; totalOut += w + r + f; proposals += n; }
   const alive = funded.filter((m) => m.alive).length;
-  rows.push(`| [${p.name}](${EXPL}/address/${p.dao}) | ${ph(p)} | ${funded.length} | ${p.duration_days} x ${Number(p.day_ns) / 6e10} min | ${fmt(stakeIn)} | ${ph(p) === "settled" ? `${fmt(w)} / ${fmt(r)} / ${fmt(f)}` : "-"} | ${ph(p) === "settled" ? alive : "-"} |`);
+  rows.push(`| [${p.name}](${EXPL}/account/${p.dao}) | ${ph(p)} | ${funded.length} | ${p.duration_days} x ${Number(p.day_ns) / 6e10} min | ${fmt(stakeIn)} | ${ph(p) === "settled" ? `${fmt(w)} / ${fmt(r)} / ${fmt(f)}` : "-"} | ${ph(p) === "settled" ? alive : "-"} |`);
 }
 const head = await rpc("block", { finality: "final" });
 const when = new Date(head.header.timestamp / 1e6).toISOString().replace(/\.\d+Z$/, "Z");

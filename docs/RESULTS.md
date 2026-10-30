@@ -22,7 +22,7 @@ Some pots settled under an earlier no-survivor rule (the whole pot went to the f
 
 | Pot (DAO) | Phase | Funded | Length | Staked | Paid: wins / refunds / fees | Alive at end |
 |---|---|---|---|---|---|---|
-| [streak-demo-1](https://testnet.nearblocks.io/address/streak-demo-1.sputnikv2.testnet) | settled | 4 | 3 x 10 min | 2.0 | 1.94 / 0.0 / 0.06 | 2 |
-| [streak-demo-2](https://testnet.nearblocks.io/address/streak-demo-2.sputnikv2.testnet) | settled | 3 | 3 x 10 min | 1.5 | 0.0 / 0.0 / 1.5 | 0 |
-| [streak-demo-3](https://testnet.nearblocks.io/address/streak-demo-3.sputnikv2.testnet) | settled | 3 | 3 x 2 min | 2.0 | 1.455 / 0.5 / 0.045 | 3 |
-| [streak-demo-4](https://testnet.nearblocks.io/address/streak-demo-4.sputnikv2.testnet) | settled | 3 | 3 x 2 min | 1.5 | 1.455 / 0.0 / 0.045 | 2 |
+| [streak-demo-1](https://testnet.near.rocks/account/streak-demo-1.sputnikv2.testnet) | settled | 4 | 3 x 10 min | 2.0 | 1.94 / 0.0 / 0.06 | 2 |
+| [streak-demo-2](https://testnet.near.rocks/account/streak-demo-2.sputnikv2.testnet) | settled | 3 | 3 x 10 min | 1.5 | 0.0 / 0.0 / 1.5 | 0 |
+| [streak-demo-3](https://testnet.near.rocks/account/streak-demo-3.sputnikv2.testnet) | settled | 3 | 3 x 2 min | 2.0 | 1.455 / 0.5 / 0.045 | 3 |
+| [streak-demo-4](https://testnet.near.rocks/account/streak-demo-4.sputnikv2.testnet) | settled | 3 | 3 x 2 min | 1.5 | 1.455 / 0.0 / 0.045 | 2 |

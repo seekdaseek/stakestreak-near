@@ -2,14 +2,14 @@
 
 All on NEAR testnet, our own test accounts (`stakestreak-near-*.testnet`), no outside users.
 Contract: `stakestreak-near.testnet`, deployed in
-[4J1JwVygDz1Roc4eQmQjgF3E3XezgHxT4Sfwhr4CrQ6A](https://testnet.nearblocks.io/txns/4J1JwVygDz1Roc4eQmQjgF3E3XezgHxT4Sfwhr4CrQ6A).
+[4J1JwVygDz1Roc4eQmQjgF3E3XezgHxT4Sfwhr4CrQ6A](https://testnet.near.rocks/tx/4J1JwVygDz1Roc4eQmQjgF3E3XezgHxT4Sfwhr4CrQ6A).
 Factory: `sputnikv2.testnet`. Produced by `scripts/testnet-pot.sh`.
 
 ## Pot 1: `streak-demo-1` (settled 2026-10-29)
 
 0.5 NEAR stakes, 4 members, 3 days of 10 minutes, 3% fee. m1 and m2 checked in every day, m3 skipped
 day 1, m4 skipped day 0. Treasury: `streak-demo-1.sputnikv2.testnet`
-([account](https://testnet.nearblocks.io/address/streak-demo-1.sputnikv2.testnet)).
+([account](https://testnet.near.rocks/account/streak-demo-1.sputnikv2.testnet)).
 
 Result, read from the DAO: 3 Transfer proposals, all `Approved`, all proposed by the contract:
 fee 0.06 NEAR, m1 0.97 NEAR, m2 0.97 NEAR (4 x 0.5 = 2.0 in; 0.06 + 0.97 + 0.97 = 2.0 out).
@@ -17,37 +17,37 @@ m3 and m4 received nothing. Balances read afterwards: m1 10.47 (10 - 0.5 + 0.97)
 
 | step | transaction |
 |---|---|
-| create_pot | [6QcweaTL7P…](https://testnet.nearblocks.io/txns/6QcweaTL7Pw317mvmEA3aAfy4A89X93gh3YFW5ES4Vdu) |
-| join stakestreak-near-m1.testnet | [4atJp5tVjR…](https://testnet.nearblocks.io/txns/4atJp5tVjR4Uy9BwSk9uQU3emGkcdCAXtu1mJBH4mGrZ) |
-| join stakestreak-near-m2.testnet | [3QQaB4WnGd…](https://testnet.nearblocks.io/txns/3QQaB4WnGdbHpoP8aL1riakBascmzx8ZsDy4ist5txs1) |
-| join stakestreak-near-m3.testnet | [4UpH62xwhF…](https://testnet.nearblocks.io/txns/4UpH62xwhFGSAdX95q2yF3tjAwLMQ4TfpF9Ed1mBYDDE) |
-| join stakestreak-near-m4.testnet | [cKs2QpRaPw…](https://testnet.nearblocks.io/txns/cKs2QpRaPwACH3ZnrzJdMpPjAFiVASY1BjGC6NMtXiz) |
-| check_in d0 stakestreak-near-m1.testnet | [9H5vFVkUgu…](https://testnet.nearblocks.io/txns/9H5vFVkUguTDQagrGJQa49VmZtRHnDMySCBDxenpAGJc) |
-| check_in d0 stakestreak-near-m2.testnet | [AfPvuV8tcN…](https://testnet.nearblocks.io/txns/AfPvuV8tcNX58NXeXk3wDKaDZsycfLQWUPu3zdUoz1G1) |
-| check_in d0 stakestreak-near-m3.testnet | [685B66cQLH…](https://testnet.nearblocks.io/txns/685B66cQLHLjeLjneAKXwcfo7KZbKMnkpbiaCSgKNVYu) |
-| check_in d1 stakestreak-near-m1.testnet | [G1thAZdyKf…](https://testnet.nearblocks.io/txns/G1thAZdyKfT8iHJo3YPR2ZPzs1av16NZgd9x2y2eWqiL) |
-| check_in d1 stakestreak-near-m2.testnet | [5jF12YPTWx…](https://testnet.nearblocks.io/txns/5jF12YPTWx1NYtWAXZijkNT71FrrTt9oLRU9JXov1qay) |
-| check_in d1 stakestreak-near-m4.testnet | [8J5s5WZAxY…](https://testnet.nearblocks.io/txns/8J5s5WZAxY24EQeGUrucUq2DdRn7NDsMGYGS3AXiZhjn) |
-| check_in d2 stakestreak-near-m1.testnet | [AHxHQy5WUH…](https://testnet.nearblocks.io/txns/AHxHQy5WUHNnrViZLkKY3x8KU23hXtFyeC63N5gtWopd) |
-| check_in d2 stakestreak-near-m2.testnet | [55VEvFEPAU…](https://testnet.nearblocks.io/txns/55VEvFEPAUuVRfsEUAe1aseaZkTEATT85WhWew65WUFW) |
-| check_in d2 stakestreak-near-m3.testnet | [6fs5nFtgdF…](https://testnet.nearblocks.io/txns/6fs5nFtgdFGAjGfPofpMSyxvJCWax695mjuSwe8YUsu3) |
-| check_in d2 stakestreak-near-m4.testnet | [8CHaprh6xK…](https://testnet.nearblocks.io/txns/8CHaprh6xKDY5wu8q1214hnGTaZ1dytNZADk8pQ1K5yS) |
-| settle (batch 3) #0 | [CCufRYoSEM…](https://testnet.nearblocks.io/txns/CCufRYoSEMwAJQVPRj9TWd8Gk16pQUdk9TGxwHgunFv6) |
+| create_pot | [6QcweaTL7P…](https://testnet.near.rocks/tx/6QcweaTL7Pw317mvmEA3aAfy4A89X93gh3YFW5ES4Vdu) |
+| join stakestreak-near-m1.testnet | [4atJp5tVjR…](https://testnet.near.rocks/tx/4atJp5tVjR4Uy9BwSk9uQU3emGkcdCAXtu1mJBH4mGrZ) |
+| join stakestreak-near-m2.testnet | [3QQaB4WnGd…](https://testnet.near.rocks/tx/3QQaB4WnGdbHpoP8aL1riakBascmzx8ZsDy4ist5txs1) |
+| join stakestreak-near-m3.testnet | [4UpH62xwhF…](https://testnet.near.rocks/tx/4UpH62xwhFGSAdX95q2yF3tjAwLMQ4TfpF9Ed1mBYDDE) |
+| join stakestreak-near-m4.testnet | [cKs2QpRaPw…](https://testnet.near.rocks/tx/cKs2QpRaPwACH3ZnrzJdMpPjAFiVASY1BjGC6NMtXiz) |
+| check_in d0 stakestreak-near-m1.testnet | [9H5vFVkUgu…](https://testnet.near.rocks/tx/9H5vFVkUguTDQagrGJQa49VmZtRHnDMySCBDxenpAGJc) |
+| check_in d0 stakestreak-near-m2.testnet | [AfPvuV8tcN…](https://testnet.near.rocks/tx/AfPvuV8tcNX58NXeXk3wDKaDZsycfLQWUPu3zdUoz1G1) |
+| check_in d0 stakestreak-near-m3.testnet | [685B66cQLH…](https://testnet.near.rocks/tx/685B66cQLHLjeLjneAKXwcfo7KZbKMnkpbiaCSgKNVYu) |
+| check_in d1 stakestreak-near-m1.testnet | [G1thAZdyKf…](https://testnet.near.rocks/tx/G1thAZdyKfT8iHJo3YPR2ZPzs1av16NZgd9x2y2eWqiL) |
+| check_in d1 stakestreak-near-m2.testnet | [5jF12YPTWx…](https://testnet.near.rocks/tx/5jF12YPTWx1NYtWAXZijkNT71FrrTt9oLRU9JXov1qay) |
+| check_in d1 stakestreak-near-m4.testnet | [8J5s5WZAxY…](https://testnet.near.rocks/tx/8J5s5WZAxY24EQeGUrucUq2DdRn7NDsMGYGS3AXiZhjn) |
+| check_in d2 stakestreak-near-m1.testnet | [AHxHQy5WUH…](https://testnet.near.rocks/tx/AHxHQy5WUHNnrViZLkKY3x8KU23hXtFyeC63N5gtWopd) |
+| check_in d2 stakestreak-near-m2.testnet | [55VEvFEPAU…](https://testnet.near.rocks/tx/55VEvFEPAUuVRfsEUAe1aseaZkTEATT85WhWew65WUFW) |
+| check_in d2 stakestreak-near-m3.testnet | [6fs5nFtgdF…](https://testnet.near.rocks/tx/6fs5nFtgdFGAjGfPofpMSyxvJCWax695mjuSwe8YUsu3) |
+| check_in d2 stakestreak-near-m4.testnet | [8CHaprh6xK…](https://testnet.near.rocks/tx/8CHaprh6xKDY5wu8q1214hnGTaZ1dytNZADk8pQ1K5yS) |
+| settle (batch 3) #0 | [CCufRYoSEM…](https://testnet.near.rocks/tx/CCufRYoSEMwAJQVPRj9TWd8Gk16pQUdk9TGxwHgunFv6) |
 
-The transaction pages were checked on nearblocks (see the report), not all of them; the transaction ids were printed by the CLI and the outcomes above were read from the contract and the DAO by view calls.
+The transaction pages were checked on an explorer (see the report), not all of them; the transaction ids were printed by the CLI and the outcomes above were read from the contract and the DAO by view calls.
 
 ## Pot 2: `streak-demo-2` (wallet test, in progress)
 
 0.5 NEAR stakes, 3 days of 10 minutes, 3% fee, joining open until 2026-10-29 18:50:44 UTC, minimum 3
 members. Created by `stakestreak-near-fee.testnet`
-([74nGZpqW…](https://testnet.nearblocks.io/txns/74nGZpqWdZqhspCV25p9BBFWt4nrKh5tRHSvDc6KuySf)); test accounts m1
-([H7MpXDwY…](https://testnet.nearblocks.io/txns/H7MpXDwYwupSvMruF1y7MXmXnfiEhCNoAdwYpj1YYw2H)) and m2
-([j4Dmryu1…](https://testnet.nearblocks.io/txns/j4Dmryu12NVpHsBkKKBNmJUrVKEf51ti32jxJZZ9XYu)) joined by CLI.
+([74nGZpqW…](https://testnet.near.rocks/tx/74nGZpqWdZqhspCV25p9BBFWt4nrKh5tRHSvDc6KuySf)); test accounts m1
+([H7MpXDwY…](https://testnet.near.rocks/tx/H7MpXDwYwupSvMruF1y7MXmXnfiEhCNoAdwYpj1YYw2H)) and m2
+([j4Dmryu1…](https://testnet.near.rocks/tx/j4Dmryu12NVpHsBkKKBNmJUrVKEf51ti32jxJZZ9XYu)) joined by CLI.
 The remaining transactions are made through the web client with a separate wallet held by the
 developer, through the web client. That is not an outside user.
 
 The developer's separate wallet account was funded with 2 NEAR from test account m4
-([GrJoSv4Y…](https://testnet.nearblocks.io/txns/GrJoSv4YWPeDpbciPcUy4ndLVE9u7SCgoKbKmDYPY44Q)).
+([GrJoSv4Y…](https://testnet.near.rocks/tx/GrJoSv4YWPeDpbciPcUy4ndLVE9u7SCgoKbKmDYPY44Q)).
 Note: `rpc.testnet.near.org` started answering HTTP 429 "deprecated" on 2026-10-29; the client and the
 fetch script use FastNEAR's testnet RPC (`rpc.testnet.fastnear.com`, then `test.rpc.fastnear.com`, then the archival RPC) instead.
 
@@ -58,7 +58,7 @@ sign-in added a function-call key limited to `check_in` on `stakestreak-near.tes
 0.25 NEAR), read from the account's key list. The first join attempts failed in the page for two
 reasons found and fixed (browser could not reach `rpc.testnet.near.org`; Meteor rejects the
 internal action shape, see docs/FEEDBACK.md items 8 and 9). Join, read from chain
-(`tx` RPC, final): [6YjBhFEX…](https://testnet.nearblocks.io/txns/6YjBhFEXyFQwiXTC9Bpkpimq99zx8Cst5H3Y7jM22m75),
+(`tx` RPC, final): [6YjBhFEX…](https://testnet.near.rocks/tx/6YjBhFEXyFQwiXTC9Bpkpimq99zx8Cst5H3Y7jM22m75),
 signer: the developer's wallet account, (full-access key, wallet approval), method `join`, 0.5 NEAR, 50 Tgas,
 `SuccessValue`. The pot then listed 3 funded members and the DAO held 7.08 NEAR (5.58 creation + 3 x 0.5).
 
@@ -69,19 +69,19 @@ by a script; the developer's wallet account the developer's wallet account by ha
 
 | Window | Who | Result |
 |---|---|---|
-| 1 (18:50:44-19:00:44) | m1 | check-in ok ([9AsEMHT5…](https://testnet.nearblocks.io/txns/9AsEMHT5CCvNiVH48QWea48FCDMbobUUkkSLWcq8f3Yr)) |
-| 1 | m2 | check-in ok ([2uNNKQXk…](https://testnet.nearblocks.io/txns/2uNNKQXkvojei1hjzEpC6ZAaFPycCD5JgXqgom2oE198)) |
-| 1 | developer's wallet account | check-in ok at 18:51:41 ([3moLRnQz…](https://testnet.nearblocks.io/txns/3moLRnQzPgrotkimCddpfKubWRXx5iZQzPTXcmaSEGry)) |
+| 1 (18:50:44-19:00:44) | m1 | check-in ok ([9AsEMHT5…](https://testnet.near.rocks/tx/9AsEMHT5CCvNiVH48QWea48FCDMbobUUkkSLWcq8f3Yr)) |
+| 1 | m2 | check-in ok ([2uNNKQXk…](https://testnet.near.rocks/tx/2uNNKQXkvojei1hjzEpC6ZAaFPycCD5JgXqgom2oE198)) |
+| 1 | developer's wallet account | check-in ok at 18:51:41 ([3moLRnQz…](https://testnet.near.rocks/tx/3moLRnQzPgrotkimCddpfKubWRXx5iZQzPTXcmaSEGry)) |
 | 2 (19:00:44-19:10:44) | m1 | **no transaction reached the chain** (script call at 19:01:14 returned no tx id; scan of every block from about 19:00:34 to 19:02:04 shows no m1 transaction) |
 | 2 | m2 | skipped on purpose (out) |
 | 2 | developer's wallet account | no check-in on chain |
-| 3 (19:10:44-19:20:44) | m1 | check-in ok ([AnMm9Sx4…](https://testnet.nearblocks.io/txns/AnMm9Sx43NbceDRxrkLPHCLmyPAXi1Sh6ikPXcDzrVvp)), but too late: day 1 was already missed |
+| 3 (19:10:44-19:20:44) | m1 | check-in ok ([AnMm9Sx4…](https://testnet.near.rocks/tx/AnMm9Sx43NbceDRxrkLPHCLmyPAXi1Sh6ikPXcDzrVvp)), but too late: day 1 was already missed |
 | 3 | developer's wallet account | no check-in on chain |
 
 Read back from the contract after the end (`get_pot`): day bitmasks m1 `5` (days 0 and 2), m2 `1`, developer wallet `1`;
 all three `alive: false`. The contract did what its rules say for "no survivors": one Transfer proposal,
 id 0, 1.5 NEAR (the whole pot, no 3% cut) to `stakestreak-near-fee.testnet`, status `Approved`,
-settled by m4 in [4L45icTR…](https://testnet.nearblocks.io/txns/4L45icTRNLwZgAfqeFXWYjpRNvddsbJhrtG26p2g3Roy).
+settled by m4 in [4L45icTR…](https://testnet.near.rocks/tx/4L45icTRNLwZgAfqeFXWYjpRNvddsbJhrtG26p2g3Roy).
 Balances after: pot DAO 5.58 NEAR (the creation storage only), fee account 5.944 NEAR. Nobody was paid out as a winner. The
 planned result (the developer's wallet account and m1 paid, m2 nothing, fee 0.045) did **not** happen.
 
@@ -99,25 +99,25 @@ The sweep above was the contract's rule at the time. It is replaced: when nobody
 member gets the stake back minus the fee (3% of the stake), and the fees go to the fee account as one Transfer. Tests:
 `no_survivors_refunds_stake_minus_fee` (refund path), `full_pot_pays_survivors_by_policy` (survivors split), unit test
 `refund_split_adds_up_to_one_stake`; the full suite ran green (15 tests) after the change.
-Redeploy to `stakestreak-near.testnet`: [GdUjQwvu…](https://testnet.nearblocks.io/txns/GdUjQwvuYmEqB5G2vjb2ybPqoJNgjbeFG4Lw5axBDZrm).
+Redeploy to `stakestreak-near.testnet`: [GdUjQwvu…](https://testnet.near.rocks/tx/GdUjQwvuYmEqB5G2vjb2ybPqoJNgjbeFG4Lw5axBDZrm).
 On-chain code sha256 read back from the node equals the local build (`97651042…b69d9`), and `get_pot` still reads
 `streak-demo-1` and `streak-demo-2` (state layout unchanged). The new rule has **not yet run on testnet**; the recorded demo pot will show it.
 
 ## The control on testnet: `streak-control-1` (2026-10-29)
 
 The same three-friend pot as a plain Sputnik multisig: council of three, 2 votes needed, **no companion contract**
-([create, 5.6 NEAR attached](https://testnet.nearblocks.io/txns/Buju1HcxGVyxpn2yqCt9AQhXbg6zeK2CB4KybQa9vksv); DAO
-[`streak-control-1.sputnikv2.testnet`](https://testnet.nearblocks.io/address/streak-control-1.sputnikv2.testnet)). Made by
+([create, 5.6 NEAR attached](https://testnet.near.rocks/tx/Buju1HcxGVyxpn2yqCt9AQhXbg6zeK2CB4KybQa9vksv); DAO
+[`streak-control-1.sputnikv2.testnet`](https://testnet.near.rocks/account/streak-control-1.sputnikv2.testnet)). Made by
 `scripts/testnet-control.sh`. Each member sent 0.5 NEAR to the treasury:
-[m1](https://testnet.nearblocks.io/txns/G714So4jCg3crFCNNU5fo7Cr2GQp6Cye3HHuUnZJcdkF),
-[m2](https://testnet.nearblocks.io/txns/ByKikqeEUu4fsY5LCqrunsT1RD7Q2DR2GMQ6tG2MoXGW),
-[m4](https://testnet.nearblocks.io/txns/BqDy3T86tixs6Dyd5DtuXV46BD6qt5h3QVn4GBLYXmr1).
+[m1](https://testnet.near.rocks/tx/G714So4jCg3crFCNNU5fo7Cr2GQp6Cye3HHuUnZJcdkF),
+[m2](https://testnet.near.rocks/tx/ByKikqeEUu4fsY5LCqrunsT1RD7Q2DR2GMQ6tG2MoXGW),
+[m4](https://testnet.near.rocks/tx/BqDy3T86tixs6Dyd5DtuXV46BD6qt5h3QVn4GBLYXmr1).
 
 | Step | Result |
 |---|---|
-| m1 is the "survivor": [add_proposal](https://testnet.nearblocks.io/txns/2cFomKwgjyxTgS4Y455Lar68Mm576HDpDhP6kfk9Yy84) (1.5 NEAR to m1) and [votes yes](https://testnet.nearblocks.io/txns/HVWH1zKTuxyurhaaiC4cLSSPhNhVhj2uKPf9tCrYyyZR) | proposal 0: 1 of 2 votes |
+| m1 is the "survivor": [add_proposal](https://testnet.near.rocks/tx/2cFomKwgjyxTgS4Y455Lar68Mm576HDpDhP6kfk9Yy84) (1.5 NEAR to m1) and [votes yes](https://testnet.near.rocks/tx/HVWH1zKTuxyurhaaiC4cLSSPhNhVhj2uKPf9tCrYyyZR) | proposal 0: 1 of 2 votes |
 | m2 and m4 (the "losers") do nothing for 180 s | status `InProgress`, treasury still 7.1 NEAR (5.6 creation + 1.5 stakes), the survivor has nothing |
-| Control check: [m2 votes yes](https://testnet.nearblocks.io/txns/FPPRvPLz7QgAoZMa278rdLP3yJHNLLz6vh58M8koQzhi) | status `Approved`, treasury 5.6 NEAR, m1 received the 1.5 NEAR (balance read back) |
+| Control check: [m2 votes yes](https://testnet.near.rocks/tx/FPPRvPLz7QgAoZMa278rdLP3yJHNLLz6vh58M8koQzhi) | status `Approved`, treasury 5.6 NEAR, m1 received the 1.5 NEAR (balance read back) |
 
 So the multisig works only when a loser cooperates; the StakeStreak pot pays by rule, with nobody voting
 (`streak-demo-1`). The first create attempt with 5.4 NEAR attached was refused by the node
@@ -129,7 +129,7 @@ copy of the code); 5.6 worked. Both are in the runner log, not on chain (no tran
 `MIN_DAO_DEPOSIT` raised from 5.4 to 5.5 NEAR (so `create_pot` needs at least 5.52 attached), derived in
 [DESIGN.md](DESIGN.md#cost-of-one-pot-dao-the-number-that-looks-bad). Tests: `one_yocto_under_the_minimum_is_refused`,
 `exactly_the_minimum_creates_and_settles`, `min_dao_deposit_covers_the_worst_case_dao`; the full suite ran once, 18 passed.
-Redeploy: [6sPPjEtT…](https://testnet.nearblocks.io/txns/6sPPjEtTzMYvxGH821k5HpXEAMM2fZecUKPrCoRwugyD); on-chain code
+Redeploy: [6sPPjEtT…](https://testnet.near.rocks/tx/6sPPjEtTzMYvxGH821k5HpXEAMM2fZecUKPrCoRwugyD); on-chain code
 sha256 `da36de71…23ab` equals the local build (read back from the node); `streak-demo-1` and `streak-demo-2` still read.
 
 Also found while running the suite: one test run hung for 16 minutes at 0% CPU inside `cargo near build`'s ABI step
@@ -140,18 +140,18 @@ and builds the contract once per test binary; the deployed wasm is still built w
 
 No wallet, no laptop: `scripts/testnet-freeze-leave.sh` ran on a server with the retrying sender (`scripts/send-retry.sh`).
 0.5 NEAR stakes, 3 days of 2 minutes, 3% fee, minimum 3 members, DAO
-[`streak-demo-3.sputnikv2.testnet`](https://testnet.nearblocks.io/address/streak-demo-3.sputnikv2.testnet).
-Created by m1 with 5.6 NEAR ([7jP47qDS…](https://testnet.nearblocks.io/txns/7jP47qDS7GmLhjFyEPE9vDm2aYt1kshy3HaXGDZgpvp1)).
+[`streak-demo-3.sputnikv2.testnet`](https://testnet.near.rocks/account/streak-demo-3.sputnikv2.testnet).
+Created by m1 with 5.6 NEAR ([7jP47qDS…](https://testnet.near.rocks/tx/7jP47qDS7GmLhjFyEPE9vDm2aYt1kshy3HaXGDZgpvp1)).
 
 | Step | Transaction |
 |---|---|
-| m1, m2, m3, m4 join | [m1](https://testnet.nearblocks.io/txns/6iS5qwwQWVaS5poANjB5TfXYUF1eunZ3MGgiZSxwdoiz), [m2](https://testnet.nearblocks.io/txns/2QEfGPuCj8K5VYjPmCrPQd2Zhzx7ByvULNereYStkR53), [m3](https://testnet.nearblocks.io/txns/8jbebmoJPjLZRzV3jzGx2p8FPvaqBTTim8eNJRrVGCUA), [m4](https://testnet.nearblocks.io/txns/3uutayW3NtB5yQco5kRaxpMxcVzNJDNC1hfa91Sxjrjc) |
-| **m4 leaves before the start** (refund of the full stake, no fee) | [CakTium…](https://testnet.nearblocks.io/txns/CakTiumQxNv9AdxwqQivynrqAF7o8ejh2h3xmZTzh8pD) |
-| Day 0: m1, m2, m3 check in | [m1](https://testnet.nearblocks.io/txns/4DzpqyLvaYk7b3B2MpZDHUWrk8cFAGuktK3ioHBh4N7X), [m2](https://testnet.nearblocks.io/txns/BCppiJ5JBUrY86rp8JoVHobuRr5WygLFiAnEfhQFKmHw), [m3](https://testnet.nearblocks.io/txns/BWNBZa31WyUMezLfYpzN3djy5DUBvVuL8WbFTGtJ2T1A) |
-| Day 1: m1, m2 check in, **m3 does not** | [m1](https://testnet.nearblocks.io/txns/J7k68ELTcEhrxxkDRfjkwHoJjME9CVTbANyHiFZYzqmT), [m2](https://testnet.nearblocks.io/txns/6sGNzrpzZ8kb4eXr8qxjXdc6mF9WkUSp5K5m98EwZ1bm) |
-| Day 2: **m3 buys a freeze** (0.05 NEAR, covers day 1) | [EmHQyfmt…](https://testnet.nearblocks.io/txns/EmHQyfmtniZWucMqjLrAMV1Hz3hQtdxYW3JHVtFMrKAU) |
-| Day 2: m1, m2, m3 check in | [m1](https://testnet.nearblocks.io/txns/DeuiXBpThLqi397hdX5ZvWrqYDeVHXxcaxVJXwVSUeU9), [m2](https://testnet.nearblocks.io/txns/9zZES4pBcDN82zCSi32cU2sZP4YfaCdgYfAQyCd7XM9R), [m3](https://testnet.nearblocks.io/txns/99Ezp6DM1ABqtQLf1QWmnKr933n17bSHo7JZw8yuWvXt) |
-| Settle (two calls, batch 3) | [AwgNR1c8…](https://testnet.nearblocks.io/txns/AwgNR1c81aqFG1p7kQgmPhgJscyz1tyRGtQz3bhwzFy8), [7kVLFv2Z…](https://testnet.nearblocks.io/txns/7kVLFv2Z9cbt6T4urw5G7DSEeXRaLdKNpZ8Dh2aUMoS) |
+| m1, m2, m3, m4 join | [m1](https://testnet.near.rocks/tx/6iS5qwwQWVaS5poANjB5TfXYUF1eunZ3MGgiZSxwdoiz), [m2](https://testnet.near.rocks/tx/2QEfGPuCj8K5VYjPmCrPQd2Zhzx7ByvULNereYStkR53), [m3](https://testnet.near.rocks/tx/8jbebmoJPjLZRzV3jzGx2p8FPvaqBTTim8eNJRrVGCUA), [m4](https://testnet.near.rocks/tx/3uutayW3NtB5yQco5kRaxpMxcVzNJDNC1hfa91Sxjrjc) |
+| **m4 leaves before the start** (refund of the full stake, no fee) | [CakTium…](https://testnet.near.rocks/tx/CakTiumQxNv9AdxwqQivynrqAF7o8ejh2h3xmZTzh8pD) |
+| Day 0: m1, m2, m3 check in | [m1](https://testnet.near.rocks/tx/4DzpqyLvaYk7b3B2MpZDHUWrk8cFAGuktK3ioHBh4N7X), [m2](https://testnet.near.rocks/tx/BCppiJ5JBUrY86rp8JoVHobuRr5WygLFiAnEfhQFKmHw), [m3](https://testnet.near.rocks/tx/BWNBZa31WyUMezLfYpzN3djy5DUBvVuL8WbFTGtJ2T1A) |
+| Day 1: m1, m2 check in, **m3 does not** | [m1](https://testnet.near.rocks/tx/J7k68ELTcEhrxxkDRfjkwHoJjME9CVTbANyHiFZYzqmT), [m2](https://testnet.near.rocks/tx/6sGNzrpzZ8kb4eXr8qxjXdc6mF9WkUSp5K5m98EwZ1bm) |
+| Day 2: **m3 buys a freeze** (0.05 NEAR, covers day 1) | [EmHQyfmt…](https://testnet.near.rocks/tx/EmHQyfmtniZWucMqjLrAMV1Hz3hQtdxYW3JHVtFMrKAU) |
+| Day 2: m1, m2, m3 check in | [m1](https://testnet.near.rocks/tx/DeuiXBpThLqi397hdX5ZvWrqYDeVHXxcaxVJXwVSUeU9), [m2](https://testnet.near.rocks/tx/9zZES4pBcDN82zCSi32cU2sZP4YfaCdgYfAQyCd7XM9R), [m3](https://testnet.near.rocks/tx/99Ezp6DM1ABqtQLf1QWmnKr933n17bSHo7JZw8yuWvXt) |
+| Settle (two calls, batch 3) | [AwgNR1c8…](https://testnet.near.rocks/tx/AwgNR1c81aqFG1p7kQgmPhgJscyz1tyRGtQz3bhwzFy8), [7kVLFv2Z…](https://testnet.near.rocks/tx/7kVLFv2Z9cbt6T4urw5G7DSEeXRaLdKNpZ8Dh2aUMoS) |
 
 Read back by view calls after the end: `get_pot` says `settled`, 0 pending; m1, m2, m3 `alive` with day mask `7`, m3 with 1
 freeze used. Five Transfer proposals, all `Approved`, all proposed by the contract: 0.5 NEAR to m4 (the leave refund), 0.045
@@ -165,7 +165,7 @@ before the start, which is the transaction in the table; the script now uses 150
 
 The server runner: `near-cli-rs` 0.30.1 (the project's release binary, sha256 checked against the published file), the four
 test accounts' keys in a root-only folder of its own, nothing else on the server touched. `send_tx` proof on the server: a view
-call and one real transaction ([7MrWbvaX…](https://testnet.nearblocks.io/txns/7MrWbvaBXR5SXzzaXKpuhiueF9LejLoJYDfseqAgSz8a),
+call and one real transaction ([7MrWbvaX…](https://testnet.near.rocks/tx/7MrWbvaBXR5SXzzaXKpuhiueF9LejLoJYDfseqAgSz8a),
 an idempotent `settle` on the already settled `streak-demo-2`, `SuccessValue`).
 
 **Deposit minimum, live:** a `create_pot` with 5.51 NEAR (one cent under the 5.52 minimum) from the server was refused by the node's
@@ -193,24 +193,24 @@ use_freeze 60, leave 150, settle 300 with batch 3, create_pot 300 Tgas) is what 
 ## Pot 4: `streak-demo-4`, the recorded demo (2026-10-30)
 
 0.5 NEAR stakes, 3 days of 2 minutes, 3% fee, minimum 3 members, join window 8 minutes, DAO
-[`streak-demo-4.sputnikv2.testnet`](https://testnet.nearblocks.io/address/streak-demo-4.sputnikv2.testnet). Two test members were driven by
+[`streak-demo-4.sputnikv2.testnet`](https://testnet.near.rocks/account/streak-demo-4.sputnikv2.testnet). Two test members were driven by
 scripts on the server (`scripts/testnet-demo-pot.sh`, 0 give-ups); the third member was a separate wallet held by the developer, through the hosted
 web client (https://stakestreak-near.pages.dev), signing with Meteor Wallet. Not an outside user.
 Times are UTC (Chisinau is UTC+2): start 06:08:02, days 06:08:02, 06:10:02, 06:12:02, end 06:14:02.
 
 | Step | Transaction |
 |---|---|
-| m2 creates the pot, 5.6 NEAR attached | [6zjjGiXz…](https://testnet.nearblocks.io/txns/6zjjGiXze43ugvJ3xto93XhGq6iNvZcAWHjmPLjuW9ME) |
-| m1, m2 join (server) | [m1](https://testnet.nearblocks.io/txns/qQjvdsHqMC2AJvhW3uBtYrf1xetgKVeZJNj7EUfhWEx), [m2](https://testnet.nearblocks.io/txns/G9wbtwzMAZg5fJ1zZYWiCzEkxHiDU6aL5HVwbYFnxpgp) |
-| Wallet sign-in adds a function-call key limited to `check_in` (06:02:44, full-access key, Meteor approval) | [J6qqqjya…](https://testnet.nearblocks.io/txns/J6qqqjyaSd6NtEvBy6JsACTqNoTbE5fLYobBYbUGZd21) |
-| Wallet joins with 0.5 NEAR (06:03:02, full-access key, Meteor "Approve Transaction") | [5emLxW7T…](https://testnet.nearblocks.io/txns/5emLxW7TJzV66f8TBWcEptnrDkw7VYZ55bkQWUGVXjjn) |
-| Day 1: m1, m2 (server) | [m1](https://testnet.nearblocks.io/txns/AGQz6qWz8YtA29EsiBaCqne9cc9zqMf6fgwWN1g5TvAZ), [m2](https://testnet.nearblocks.io/txns/DuDrcW6KekmTkjALWC1Spim7vLu5dYnquiDpWSzE98fq) |
-| Day 1: wallet check-in (06:08:18, function-call key) and a second one (06:08:31, same key; both returned day 0, the second changes nothing) | [2F7N4Zyk…](https://testnet.nearblocks.io/txns/2F7N4ZykfXwiRgsV5aRLkCybccJwHXrvYeAdutPQTHPS), [GA73WzDf…](https://testnet.nearblocks.io/txns/GA73WzDfAd6FSAxFqmwD6PYnCgqVGUvQ9kxdmKrTSaRj) |
-| Day 2: m1 (server); m2 skips | [m1](https://testnet.nearblocks.io/txns/8XHEBvmEkRmSyusi1raDsgG93XoqoP6xaqXmM7fgnUmU) |
-| Day 2: wallet check-in (06:10:16, function-call key) | [GPKmxYza…](https://testnet.nearblocks.io/txns/GPKmxYza3S983krgtz4yH6zngq5DcGm6W41nsRwrKxgL) |
-| Day 3: m1 (server) | [m1](https://testnet.nearblocks.io/txns/3nbQFGXJSKCCCPcstCpLD5aLAgGUmjFz35Jrsu2ReeTA) |
-| Day 3: wallet check-in (06:12:15, function-call key) | [5yUvAXzX…](https://testnet.nearblocks.io/txns/5yUvAXzXndaunpkjB5YjnEnLAWakiZiQA5msh2NaaV3k) |
-| Settle (server) | [4FHg5XuE…](https://testnet.nearblocks.io/txns/4FHg5XuE8Nwo2tz92Y6bQiK5PTvLMv4K5kgU7wNgra3J) |
+| m2 creates the pot, 5.6 NEAR attached | [6zjjGiXz…](https://testnet.near.rocks/tx/6zjjGiXze43ugvJ3xto93XhGq6iNvZcAWHjmPLjuW9ME) |
+| m1, m2 join (server) | [m1](https://testnet.near.rocks/tx/qQjvdsHqMC2AJvhW3uBtYrf1xetgKVeZJNj7EUfhWEx), [m2](https://testnet.near.rocks/tx/G9wbtwzMAZg5fJ1zZYWiCzEkxHiDU6aL5HVwbYFnxpgp) |
+| Wallet sign-in adds a function-call key limited to `check_in` (06:02:44, full-access key, Meteor approval) | [J6qqqjya…](https://testnet.near.rocks/tx/J6qqqjyaSd6NtEvBy6JsACTqNoTbE5fLYobBYbUGZd21) |
+| Wallet joins with 0.5 NEAR (06:03:02, full-access key, Meteor "Approve Transaction") | [5emLxW7T…](https://testnet.near.rocks/tx/5emLxW7TJzV66f8TBWcEptnrDkw7VYZ55bkQWUGVXjjn) |
+| Day 1: m1, m2 (server) | [m1](https://testnet.near.rocks/tx/AGQz6qWz8YtA29EsiBaCqne9cc9zqMf6fgwWN1g5TvAZ), [m2](https://testnet.near.rocks/tx/DuDrcW6KekmTkjALWC1Spim7vLu5dYnquiDpWSzE98fq) |
+| Day 1: wallet check-in (06:08:18, function-call key) and a second one (06:08:31, same key; both returned day 0, the second changes nothing) | [2F7N4Zyk…](https://testnet.near.rocks/tx/2F7N4ZykfXwiRgsV5aRLkCybccJwHXrvYeAdutPQTHPS), [GA73WzDf…](https://testnet.near.rocks/tx/GA73WzDfAd6FSAxFqmwD6PYnCgqVGUvQ9kxdmKrTSaRj) |
+| Day 2: m1 (server); m2 skips | [m1](https://testnet.near.rocks/tx/8XHEBvmEkRmSyusi1raDsgG93XoqoP6xaqXmM7fgnUmU) |
+| Day 2: wallet check-in (06:10:16, function-call key) | [GPKmxYza…](https://testnet.near.rocks/tx/GPKmxYza3S983krgtz4yH6zngq5DcGm6W41nsRwrKxgL) |
+| Day 3: m1 (server) | [m1](https://testnet.near.rocks/tx/3nbQFGXJSKCCCPcstCpLD5aLAgGUmjFz35Jrsu2ReeTA) |
+| Day 3: wallet check-in (06:12:15, function-call key) | [5yUvAXzX…](https://testnet.near.rocks/tx/5yUvAXzXndaunpkjB5YjnEnLAWakiZiQA5msh2NaaV3k) |
+| Settle (server) | [4FHg5XuE…](https://testnet.near.rocks/tx/4FHg5XuE8Nwo2tz92Y6bQiK5PTvLMv4K5kgU7wNgra3J) |
 
 **No wallet pop-up on check-ins.** All four check-in transactions of the wallet account, read from the `tx` RPC by hash, were signed by the function-call key
 `B6okhM8U…` (receiver the contract, method `check_in`, deposit 0), never by the full-access key. Only the sign-in and the join needed Meteor approval. The return
@@ -227,5 +227,12 @@ The wallet's balance read 1.7255 NEAR afterwards. The DAO is left at 5.58 NEAR (
 deployment on the same factory with 6 NEAR refuses 5.6 and accepts 6.02; a value under the floor cannot be deployed),
 `migrate_keeps_pots_and_adds_the_minimum` (the real previous wasm, `tests/fixtures/stakestreak_v1.wasm`, a pot created on it, the new code deployed over it with
 `migrate`, the pot unchanged, the new rule live), plus unit tests for the default and the floor. Full suite once: 22 passed.
-Deploy and migrate in one transaction: [5ih5Gz8B…](https://testnet.nearblocks.io/txns/5ih5Gz8BBxhLWdz73VcdREPGU8GahxwDoa6noMQsUv19). On-chain code sha256
+Deploy and migrate in one transaction: [5ih5Gz8B…](https://testnet.near.rocks/tx/5ih5Gz8BBxhLWdz73VcdREPGU8GahxwDoa6noMQsUv19). On-chain code sha256
 `e1fcaf14…c08e` equals the local build; `get_min_dao_deposit` reads 5.5 NEAR; `streak-demo-1` to `-4` still read as settled with their payouts. Testnet only; nothing was sent to mainnet.
+
+### Explorer links moved to NEAR Rocks (2026-10-30)
+
+The web page, scripts and docs link to `testnet.near.rocks/tx/<hash>` and `testnet.near.rocks/account/<id>` (no human check, the transfers show at
+the top of the receipts) instead of nearblocks. Opened and read back: three transaction links and two account links (the settle, join and a check-in
+transaction; a pot DAO and the contract). `/address/<id>` does not render on NEAR Rocks, only `/account/<id>` does. The staged `web/index.html` changed
+for this (sha256 `198a705e…22f2c5b9`); the hosted copy keeps the nearblocks links until `web/` is uploaded again. `actions.js` and `_headers` are unchanged.
