@@ -190,15 +190,15 @@ async function listPage() {
   <div class="card">
     <div class="grid">
       <div><label>Name (becomes <code>name.${FACTORY}</code>)</label><input id="f-name" placeholder="morning-walkers"></div>
-      <div><label>Rule</label><input id="f-rule" value="walk 20 minutes"></div>
-      <div><label>Stake (NEAR)</label><input id="f-stake" value="0.5"></div>
-      <div><label>Days</label><input id="f-days" value="7" inputmode="numeric"></div>
-      <div><label>Day length (minutes)</label><input id="f-daymin" value="1440" inputmode="numeric"></div>
+      <div><label>Rule</label><input id="f-rule" value="walk 20 minutes" maxlength="120"></div>
+      <div><label>Stake (NEAR, at least 0.001)</label><input id="f-stake" value="0.5"></div>
+      <div><label>Days (2 to 90)</label><input id="f-days" value="7" inputmode="numeric"></div>
+      <div><label>Day length (minutes, 0.17 or more)</label><input id="f-daymin" value="1440" inputmode="numeric"></div>
       <div><label>Join window (minutes)</label><input id="f-joinmin" value="60" inputmode="numeric"></div>
-      <div><label>Minimum members</label><input id="f-min" value="3" inputmode="numeric"></div>
+      <div><label>Minimum members (2 to 20)</label><input id="f-min" value="3" inputmode="numeric"></div>
       <div><label>Fee account</label><input id="f-fee" placeholder="where the 3% goes"></div>
     </div>
-    <p class="mut small">Creating a pot attaches <b>5.6 NEAR</b>: about 5.4 stays locked in the new DAO as storage for its code. Stakes are separate.</p>
+    <p class="mut small">Creating a pot attaches <b>5.6 NEAR</b> (the contract needs at least 5.52): 5.58 goes into the new DAO and stays there, about 5.5 NEAR of it as storage for the DAO's code and proposals, which cannot be recovered; 0.02 stays with the contract. Stakes are separate. A pot takes a 3% fee at settlement (the contract's maximum) and a streak freeze costs 0.05 NEAR.</p>
     <button data-act="create">Create pot</button>
   </div>`;
 }

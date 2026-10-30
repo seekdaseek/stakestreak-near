@@ -182,3 +182,10 @@ bytes hash to the repo's `web/index.html` (`1e9e2c84…7ec1`), `actions.js` hash
 (no-cache, nosniff, no-referrer) are applied (the file itself is not served), the pot list loads all three settled pots, a pot page shows
 the streak board, payouts and the DAO policy, the wallet modal lists Meteor Wallet only (no sign-in done), no console errors, and the
 page's requests go only to the host, jsDelivr and `rpc.testnet.fastnear.com`.
+
+Staged, not yet uploaded (2026-10-30): `web/index.html` in the repo is ahead of the hosted copy. The create form now states the real
+numbers (5.6 NEAR attached, 5.52 the contract's minimum, 5.58 into the DAO, 0.02 kept by the contract, 3% fee, 0.05 NEAR freeze)
+and the contract's limits (2 to 90 days, 2 to 20 minimum members, stake at least 0.001 NEAR, day length at least 10 s, rule up to
+120 characters). Each limit was checked against the deployed contract: eight out-of-range `create_pot` calls were each refused by the
+node's simulation with the matching `ERR_...` (no transaction sent, no pot created). Gas used by the page (join 50, check_in 30,
+use_freeze 60, leave 150, settle 300 with batch 3, create_pot 300 Tgas) is what succeeded on testnet in the pots above.
