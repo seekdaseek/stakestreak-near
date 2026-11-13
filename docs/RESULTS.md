@@ -1,6 +1,6 @@
 # Results (written by scripts/results.mjs, do not edit by hand)
 
-Read from view calls on `stakestreak-near.testnet` (testnet) at block 275418525, 2026-10-30T07:25:45Z.
+Read from view calls on `stakestreak-near.testnet` (testnet) at block 277487647, 2026-11-13T08:48:38Z.
 
 | | |
 |---|---|

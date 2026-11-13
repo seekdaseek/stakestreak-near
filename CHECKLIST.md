@@ -1,23 +1,39 @@
-# CHECKLIST (no file, no submit)
+# CHECKLIST
 
-Status as of 2026-10-29. DONE / OPEN / UNTESTED are literal.
+Status as of 2026-11-13, written before the repository was made public. DONE / OPEN / UNTESTED are literal.
+The rules read live from https://nearhackathon.com/HACKATHON.md on 2026-11-13 (sha256 prefix `6dd0c1ff2f98a2fc`).
 
-1. **Rubric.** No formal rubric. Track `social` text mapped to scenes and named tests:
-   - "Shared budgets": the pot's stakes sit in one Sputnik DAO treasury per pot. `full_pot_pays_survivors_by_policy`
-   - "Programmable rewards": survivors paid by rule, no vote. `full_pot_pays_survivors_by_policy`, `settler_crash_mid_settlement_pays_only_survivors_once`
-   - "Collective ownership": the group's money is in a DAO none of them can drain alone. `dao_policy_leaves_one_way_out`
-   - "Reputation-based access": the streak board (check-in bits, `alive`) decides who is paid. `missed_day_is_out_by_contract_clock`
-   - "Don't rebuild the multisig": the control shows why a multisig alone is not the product. `control_multisig_stalls_when_losers_refuse`
-2. **Sponsor primitives by name.** Sputnik DAO factory (`sputnikv2.testnet` `create`), policy roles and per-kind vote policy (`settler` role, `transfer` vote policy), Transfer proposals (`add_proposal`, `act_proposal`), named accounts (`<pot>.sputnikv2.testnet`), function-call access keys (`check_in` only), near-sdk 5.29.1. Trezu: not used (it is a treasury UI; the pot DAO is readable in it, UNTESTED). Why NEAR: the pot's money sits in a DAO whose policy pays survivors and nothing else.
-3. **Action.** OPEN: a judge with a testnet wallet joins a demo pot and checks in within five minutes (needs testnet deploy + web client, Nov 1-4). DONE: one command runs whole pots in near-sandbox: `scripts/fetch-sputnik.sh` is not needed (fixtures are committed), `cargo test` runs 22 tests (10 runs in a row all green). Expected output in README: DONE (`cargo test --test demo -- --ignored --nocapture`, real output pasted).
-4. **Evidence.** Headline: pots settled on testnet: 1 (streak-demo-1: 4 members, 2.0 NEAR in, 1.94 NEAR paid to 2 survivors by policy, 0.06 fee); more in sandbox tests. Own test pots only, no outside users, which lowers the odds; this will be written in the idea text. Counted by script into docs/RESULTS.md (`node scripts/results.mjs`): DONE; refresh before submitting.
-5. **Field twins.** Searched 2026-10-29 (three web searches: Sputnik + savings circle/accountability/commitment; NEAR habit/check-in stake apps; Trezu). Found nothing on NEAR that is a stake-and-streak accountability pot or savings circle on Sputnik. Weak evidence only (search tool covers Devpost/NEAR forum poorly); we will not claim "first". Closest relatives are generic treasury tools (Trezu, Sputnik UIs). Our angle: a streak game whose payout needs no vote.
-6. **Format.** README (draft in repo, final OPEN), LICENSE MIT DONE, video OPEN, X post OPEN (he posts), idea text 20-2000 characters with the headline first OPEN.
-7. **Liveness to Nov 25.** OPEN: demo pot DAOs and the contract stay on testnet; testnet resets are a risk (state it in README).
-8. **Social.** X post required, he posts. OPEN.
-9. **Fit.** Social track, Sputnik DAO is named in the track text. DONE.
-10. **Control built and shown failing.** DONE in sandbox (`control_multisig_stalls_when_losers_refuse`, `control_multisig_pays_when_everyone_votes`) and DONE on testnet: `streak-control-1`, proposal stuck `InProgress` with the losers silent, paid after a second vote (docs/TESTNET.md).
-11. **Gates.** Testnet NEAR from the faucet: OPEN. The DAO create deposit is 5.3968 NEAR per pot (see DESIGN.md), so N testnet pots need about 5.6 x N NEAR in creator accounts: OPEN, plan the faucet accounts first.
-12. **Artifacts.** One-command demo with expected output: DONE. docs/RESULTS.md written by script: DONE. The number that makes us look bad: DONE, 5.3968 NEAR locked per pot DAO (DESIGN.md). Destructive drill: DONE in sandbox (`settler_crash_mid_settlement_pays_only_survivors_once`). docs/FEEDBACK.md: OPEN (notes so far: deployed factory differs from upstream source; get_proposals shape; near-api drops node error text). docs/SUBMISSION.md, docs/VIDEO.md: OPEN.
+1. **Fit.** Track `social` (Sputnik DAO, named accounts, shared budgets, programmable rewards). DONE.
+   Named tests: `full_pot_pays_survivors_by_policy`, `settler_crash_mid_settlement_pays_only_survivors_once`,
+   `dao_policy_leaves_one_way_out`, `missed_day_is_out_by_contract_clock`, `control_multisig_stalls_when_losers_refuse`.
+2. **Sponsor primitives.** Sputnik DAO factory `create`, policy roles and per-kind vote policy, `Transfer` proposals
+   (`add_proposal`, `act_proposal`), named accounts (`<pot>.sputnikv2.testnet`), function-call access keys (`check_in` only),
+   near-sdk 5.29.1. Trezu: not used. DONE.
+3. **Action a judge can take.** README "Try it" has six steps with commands and expected results. The hosted client
+   lists the four settled pots (checked headless on 2026-11-13); the two `curl` view calls were run on 2026-11-13;
+   `cargo test --test demo -- --ignored --nocapture` is run from a fresh public clone before submitting (see the final report).
+4. **Evidence.** [docs/RESULTS.md](docs/RESULTS.md), written by `node scripts/results.mjs` (10 s timeout per call, 3 tries,
+   10 minute limit) from view calls at block 277487647, 2026-11-13T08:48:38Z: 4 pots, 4 settled, 7.0 NEAR staked, 7.0 NEAR paid
+   by 12 approved Transfer proposals. Own test pots, no outside users. DONE.
+5. **The number that looks bad.** 5.5 NEAR locked per pot DAO on the testnet factory, stated in README and
+   [docs/SUBMISSION.md](docs/SUBMISSION.md); mainnet cost is expected to be far lower but is UNTESTED (no DAO of ours exists on mainnet).
+6. **Control built and shown failing.** DONE in the sandbox and on testnet (`streak-control-1`, see docs/TESTNET.md).
+7. **Destructive drill.** DONE in the sandbox (`settler_crash_mid_settlement_pays_only_survivors_once`).
+8. **Field twins.** Searched 2026-10-29, nothing found on NEAR that is a stake-and-streak pot on Sputnik; weak evidence, so we do not claim "first".
+9. **Liveness to 2026-11-25.** OPEN by nature: the contract, the pot DAOs and the hosted client are on testnet and a testnet reset would erase them.
+10. **Demo video.** DONE: 90 s, narrated, captions in a sidecar file; it is attached to the X post (the developer posts it).
+11. **X post.** OPEN until the developer posts it.
+12. **Submission.** OPEN until the developer reads the full payload and says yes.
 
-Disclosures to put in the README: existing product on another chain (Solana StakeStreak), only the NEAR integration is claimed; AI-assisted code, listed (README line: "Written with AI coding assistance, as the rules allow (Q-005)."); names the other project, agentfeed-near (track `agents`).
+## Rules by item (HACKATHON.md, read live 2026-11-13)
+
+| Item | Where it is met |
+|---|---|
+| Q-001 window from 2026-10-19 | the repository's first commit is 2026-10-29; no earlier history (README, "Hackathon rules") |
+| Q-002 existing product on another chain | disclosed in README and in the idea text: Solana codebase is separate and not submitted |
+| Q-003 tags plus README section with the diff | tag `hackathon-submission`; README links the history and the compare view from `1355c2c` |
+| Q-005 libraries, AI code | README lists them; the AI line is in README and in the idea text |
+| Q-010, Q-012 testnet only, demo | testnet only; public repo, reproducible README, hosted client, X post with the video |
+| Q-014 license | MIT, `LICENSE` |
+| Q-015 other entry | README names `agentfeed-near` with its repository URL; its README names this one (checked 2026-11-13) |
+| Q-013, Q-016, Q-017 | nothing to do on our side; the README is written for a machine reader as well |

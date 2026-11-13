@@ -13,15 +13,21 @@ const EXPL = "https://testnet.near.rocks";
 const NEAR = 10n ** 24n;
 const fmt = (y) => { const n = BigInt(y); const w = n / NEAR, f = (n % NEAR) / 10n ** 18n; return `${w}.${String(f).padStart(6, "0")}`.replace(/0+$/, "").replace(/\.$/, ".0"); };
 
+const DEADLINE = Date.now() + 10 * 60 * 1000; // give up after 10 minutes and keep the last snapshot
+const TRIES = 3;
 async function rpc(method, params) {
   let last;
-  for (const url of RPCS) {
-    try {
-      const r = await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }), signal: AbortSignal.timeout(15000) });
-      const j = await r.json();
-      if (j.error) throw new Error(JSON.stringify(j.error));
-      return j.result;
-    } catch (e) { last = e; }
+  for (let attempt = 1; attempt <= TRIES; attempt++) {
+    for (const url of RPCS) {
+      if (Date.now() > DEADLINE) throw new Error(`10 minute limit reached, last error: ${last}`);
+      try {
+        const r = await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }), signal: AbortSignal.timeout(10000) });
+        const j = await r.json();
+        if (j.error) throw new Error(JSON.stringify(j.error));
+        return j.result;
+      } catch (e) { last = e; }
+    }
+    await new Promise((res) => setTimeout(res, 1500 * attempt));
   }
   throw last;
 }

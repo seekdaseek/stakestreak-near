@@ -1,32 +1,32 @@
-# Submission draft (not submitted; the submission waits for the developer's yes)
+# Submission text (sent only after the developer reads the full payload and says yes)
 
-Track: `social`. Repo: github.com/seekdaseek/stakestreak-near (private until the public flip).
+Track: `social`. Repo: github.com/seekdaseek/stakestreak-near.
 Refresh the numbers from [RESULTS.md](RESULTS.md) (`node scripts/results.mjs`) right before submitting.
 
 ## Idea text (limit 20-2000 characters; headline first)
 
 > Friends stake NEAR into one Sputnik DAO, check in daily, and a DAO policy pays the survivors, with no vote.
 >
-> StakeStreak (live on the Solana dApp Store) is a habit game: equal stakes go into a shared pot, you check in every day, miss one and you are out, the survivors split the pot. On NEAR the pot is a Sputnik DAO treasury made by the factory for each pot (`<pot>.sputnikv2.testnet`). Its policy has one role, our contract, allowed to file and approve Transfer proposals and nothing else. The contract's block clock decides who is out. After the last day anyone calls settle; each payout is a Transfer proposal the policy approves. Nobody holds the money and nobody has to vote, which is what a multisig cannot do: we ran the same pot as a plain 2-of-3 Sputnik multisig on testnet and it sat at 1 of 2 votes, because the losers have no reason to sign.
+> StakeStreak (live on the Solana dApp Store) is a habit game: equal stakes go into a shared pot, you check in every day, miss one and you are out, the survivors split the pot. On NEAR the pot is a Sputnik DAO treasury created per pot (`<pot>.sputnikv2.testnet`). Its policy has one role, our contract, allowed to file and approve Transfer proposals and nothing else. The contract's block clock decides who is out. After the last day anyone calls settle; each payout is a Transfer proposal the policy approves. Nobody holds the money and nobody votes, which a multisig cannot do: the same pot as a plain 2-of-3 Sputnik multisig sat at 1 of 2 votes on testnet, because the losers have no reason to sign.
 >
 > Check-ins use a function-call key limited to `check_in`, so after joining there is no wallet pop-up.
 >
-> Evidence, testnet, our own test pots (no outside users): see docs/RESULTS.md for the counts. We also say plainly what looks bad: a pot DAO locks about 5.4 NEAR for the DAO's copy of its code, and the first full pot we ran ended with nobody alive, which led us to change the rule so losers are refunded their stake minus the fee instead of the pot going to the operator.
+> Evidence, testnet, our own test pots, no outside users: 4 pots created, all 4 settled, 7.0 NEAR staked and 7.0 NEAR paid out by 12 approved Transfer proposals, counted by script from view calls on 2026-11-13 (docs/RESULTS.md). What looks bad: on the testnet factory a pot DAO locks about 5.4 NEAR for the DAO's copy of its code, and one test pot ended with nobody alive, so we changed the rule: losers get their stake back minus the fee instead of the pot going to the operator.
 >
-> Disclosures: the product exists on Solana; only the NEAR integration (written from 2026-10-19) is the submission. Written with AI coding assistance, as the rules allow (Q-005). Same author's other entry: agentfeed-near (track `agents`).
+> Disclosures: the product exists on Solana in a separate codebase that is not part of this submission; this repository holds only the NEAR integration (first commit 2026-10-29). Written with AI coding assistance, as the rules allow (Q-005). Same author's other entry: agentfeed-near, tracks agents and realworld.
 >
-> Try it: `cargo test --test demo -- --ignored --nocapture` tells one whole pot in about a minute; the hosted web client at https://stakestreak-near.pages.dev joins a testnet pot with Meteor Wallet.
+> Try it: `cargo test --test demo -- --ignored --nocapture` tells one whole pot in about a minute; the hosted web client at https://stakestreak-near.pages.dev lists the settled testnet pots and starts or joins a pot with Meteor Wallet.
 
-Quoted text: 1,724 characters when drafted (counted by script); recount after any edit.
+Quoted text: 1,939 characters (counted by script, Unicode code points); recount after any edit.
 
 ## Field checklist
 
 | Item | State |
 |---|---|
 | README + MIT LICENSE | in repo |
-| Repo public by Nov 14 23:59Z | OPEN, the developer flips it on Nov 13 |
-| Demo video | OPEN, plan in [VIDEO.md](VIDEO.md) |
-| X post with the video | OPEN, the developer posts |
+| Repo public by Nov 14 23:59Z | made public on Nov 13 after the checks (see CHECKLIST.md) |
+| Demo video | 90 s, narrated; plan and build notes in [VIDEO.md](VIDEO.md) |
+| X post with the video | the developer posts it |
 | Liveness to Nov 25 | contract and pot DAOs stay on testnet; testnet resets are a risk, stated in the README |
 | Evidence line | from RESULTS.md, own test pots only |
 
